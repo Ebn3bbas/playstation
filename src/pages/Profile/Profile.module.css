@@ -1,0 +1,10 @@
+.detailsContainer {
+    display: flex;
+    margin: 4rem auto;
+    align-items: flex-start;
+    justify-content: space-evenly;
+}
+
+.image {
+    /* height: 100px; */
+}

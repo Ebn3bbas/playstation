@@ -1,0 +1,13 @@
+.success {
+    background-color: rgb(0, 255, 0, 0.4);
+    /* opacity: 0.8; */
+    border: 1px solid green;
+    margin: 1rem 2rem;
+    border-radius: 6px;
+}
+
+.success p {
+    color: black;
+    text-align: center;
+    font-weight: 500;
+}

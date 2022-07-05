@@ -1,0 +1,13 @@
+.error {
+    background-color: rgb(255, 0, 0, 0.4);
+    /* opacity: 0.8; */
+    border: 1px solid red;
+    margin: 1rem 2rem;
+    border-radius: 6px;
+}
+
+.error p {
+    color: black;
+    text-align: center;
+    font-weight: 500;
+}

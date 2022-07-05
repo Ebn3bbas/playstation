@@ -1,0 +1,13 @@
+.detailsImg {
+    border: 1px solid #868686;
+    border-radius: 8px;
+    height: 250px;
+    width: 250px;
+}
+
+.detailsImg img {
+    border-radius: 8px;
+    height: 95%;
+    width: 95%;
+    margin: 2.5%;
+}

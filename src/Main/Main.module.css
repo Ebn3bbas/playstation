@@ -1,0 +1,16 @@
+.mainContainer {
+    margin-left: 250px;
+    margin-top: 4.5rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin linear 0.25s;
+}
+
+.main {
+    height: 85%;
+}
+
+.sidebarDisable {
+    margin-left: 0;
+}

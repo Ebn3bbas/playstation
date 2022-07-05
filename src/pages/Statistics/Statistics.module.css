@@ -1,0 +1,66 @@
+.statisticsContainer {
+    width: 90%;
+    margin: 2rem auto 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.lineChart,
+.lineChart02 {
+    background-color: white;
+    width: 60%;
+    height: 300px;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.lineChart02 {
+    padding: 1rem;
+    width: 30%;
+}
+
+.lineChart02 .recharts-responsive-container {
+    height: 200px !important;
+}
+
+.lineChart h4,
+.lineChart02 h4 {
+    color: #000;
+    margin: 0 0 0.8rem 0.5rem !important;
+}
+
+.lineChart02Desc {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0 0 0.8rem 0 !important;
+}
+
+.lineChart02Avalible,
+.lineChart02Unavalible {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.lineChart02Avalible h4,
+.lineChart02Unavalible h4 {
+    margin: 0 0 0 0.5rem !important;
+}
+
+.lineChart02AvalibleColor,
+.lineChart02UnavalibleColor {
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    border-radius: 10px;
+}
+
+.lineChart02AvalibleColor {
+    background-color: #0088fe;
+}
+
+.tableContainer {
+    margin-bottom: 3rem;
+}
