@@ -37,9 +37,7 @@ const Users = () => {
     const columns = [
         'ID',
         'First Name',
-        'Last Name',
         'email',
-        'gender',
         'isActive',
         'edit',
         'delete',

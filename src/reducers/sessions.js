@@ -1,35 +1,35 @@
 import {
-    ADD_ROOM_FAIL,
-    ADD_ROOM_REQUEST,
-    ADD_ROOM_RESET,
-    ADD_ROOM_SUCCESS,
-    DELETE_ROOM_FAIL,
-    DELETE_ROOM_REQUEST,
-    DELETE_ROOM_RESET,
-    DELETE_ROOM_SUCCESS,
-    GET_ALL_ROOMS_FAIL,
-    GET_ALL_ROOMS_REQUEST,
-    GET_ALL_ROOMS_RESET,
-    GET_ALL_ROOMS_SUCCESS,
-    GET_ROOM_FAIL,
-    GET_ROOM_REQUEST,
-    GET_ROOM_RESET,
-    GET_ROOM_SUCCESS,
-    UPDATE_ROOM_FAIL,
-    UPDATE_ROOM_REQUEST,
-    UPDATE_ROOM_RESET,
-    UPDATE_ROOM_SUCCESS,
-} from '../constants/rooms';
+    ADD_SESSION_FAIL,
+    ADD_SESSION_REQUEST,
+    ADD_SESSION_RESET,
+    ADD_SESSION_SUCCESS,
+    DELETE_SESSION_FAIL,
+    DELETE_SESSION_REQUEST,
+    DELETE_SESSION_RESET,
+    DELETE_SESSION_SUCCESS,
+    GET_ALL_SESSIONS_FAIL,
+    GET_ALL_SESSIONS_REQUEST,
+    GET_ALL_SESSIONS_RESET,
+    GET_ALL_SESSIONS_SUCCESS,
+    GET_SESSION_FAIL,
+    GET_SESSION_REQUEST,
+    GET_SESSION_RESET,
+    GET_SESSION_SUCCESS,
+    UPDATE_SESSION_FAIL,
+    UPDATE_SESSION_REQUEST,
+    UPDATE_SESSION_RESET,
+    UPDATE_SESSION_SUCCESS,
+} from '../constants/sessions';
 
 export const getAllRoomsReducer = (state = { rooms: null }, action) => {
     switch (action.type) {
-        case GET_ALL_ROOMS_REQUEST:
+        case GET_ALL_SESSIONS_REQUEST:
             return { loading: true };
-        case GET_ALL_ROOMS_SUCCESS:
+        case GET_ALL_SESSIONS_SUCCESS:
             return { loading: false, rooms: action.payload };
-        case GET_ALL_ROOMS_FAIL:
+        case GET_ALL_SESSIONS_FAIL:
             return { loading: false, error: action.payload };
-        case GET_ALL_ROOMS_RESET:
+        case GET_ALL_SESSIONS_RESET:
             return { rooms: null };
         default:
             return state;
@@ -38,13 +38,13 @@ export const getAllRoomsReducer = (state = { rooms: null }, action) => {
 
 export const getRoomReducer = (state = { room: null }, action) => {
     switch (action.type) {
-        case GET_ROOM_REQUEST:
+        case GET_SESSION_REQUEST:
             return { loading: true };
-        case GET_ROOM_SUCCESS:
+        case GET_SESSION_SUCCESS:
             return { loading: false, room: action.payload };
-        case GET_ROOM_FAIL:
+        case GET_SESSION_FAIL:
             return { loading: false, error: action.payload };
-        case GET_ROOM_RESET:
+        case GET_SESSION_RESET:
             return { room: null };
         default:
             return state;
@@ -53,13 +53,13 @@ export const getRoomReducer = (state = { room: null }, action) => {
 
 export const addRoomReducer = (state = { room: null }, action) => {
     switch (action.type) {
-        case ADD_ROOM_REQUEST:
+        case ADD_SESSION_REQUEST:
             return { loading: true };
-        case ADD_ROOM_SUCCESS:
+        case ADD_SESSION_SUCCESS:
             return { loading: false, success: true, room: action.payload };
-        case ADD_ROOM_FAIL:
+        case ADD_SESSION_FAIL:
             return { loading: false, error: action.payload };
-        case ADD_ROOM_RESET:
+        case ADD_SESSION_RESET:
             return { room: null };
         default:
             return state;
@@ -68,13 +68,13 @@ export const addRoomReducer = (state = { room: null }, action) => {
 
 export const updateRoomReducer = (state = { room: null }, action) => {
     switch (action.type) {
-        case UPDATE_ROOM_REQUEST:
+        case UPDATE_SESSION_REQUEST:
             return { loading: true };
-        case UPDATE_ROOM_SUCCESS:
+        case UPDATE_SESSION_SUCCESS:
             return { loading: false, success: true, room: action.payload };
-        case UPDATE_ROOM_FAIL:
+        case UPDATE_SESSION_FAIL:
             return { loading: false, error: action.payload };
-        case UPDATE_ROOM_RESET:
+        case UPDATE_SESSION_RESET:
             return { room: null };
         default:
             return state;
@@ -83,13 +83,13 @@ export const updateRoomReducer = (state = { room: null }, action) => {
 
 export const deleteRoomReducer = (state = { room: null }, action) => {
     switch (action.type) {
-        case DELETE_ROOM_REQUEST:
+        case DELETE_SESSION_REQUEST:
             return { loading: true };
-        case DELETE_ROOM_SUCCESS:
+        case DELETE_SESSION_SUCCESS:
             return { loading: false, success: true, room: action.payload };
-        case DELETE_ROOM_FAIL:
+        case DELETE_SESSION_FAIL:
             return { loading: false, error: action.payload };
-        case DELETE_ROOM_RESET:
+        case DELETE_SESSION_RESET:
             return { room: null };
         default:
             return state;

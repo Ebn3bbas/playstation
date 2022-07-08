@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { deleteAgency, getAllAgencys } from '../../actions/agency';
+import { deleteAgency, getAllAgencys } from '../../actions/device';
 import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import EditButton from '../../components/Buttons/EditButton/EditButton';
 import Error from '../../components/Error/Error';
@@ -39,8 +39,7 @@ const Devices = () => {
     const columns = [
         'ID',
         'Name',
-        'Golds',
-        'Beans',
+        'Type',
         'isActive',
         'edit',
         'delete',

@@ -10,7 +10,7 @@ import { getAllStores } from '../../actions/store';
 const Store = () => {
     const navigate = useNavigate();
     const updateHandler = () => {
-        navigate('/drinks-update-form');
+        navigate('/store-update-form');
     };
     let limit = 10;
     const [currentPage, setCurrentPage] = useState(1);
@@ -28,10 +28,7 @@ const Store = () => {
     }, [dispatch, currentPage, limit]);
     const columns = [
         'Name',
-        'Description',
         'Price',
-        'Category',
-        'Avatar',
         'edit',
         'delete',
     ];
@@ -64,7 +61,7 @@ const Store = () => {
                 <Table
                     data={data}
                     columns={columns}
-                    tableName='Drinks'
+                    tableName='Store'
                     showDetails={true}
                     addNewButton={true}
                 />

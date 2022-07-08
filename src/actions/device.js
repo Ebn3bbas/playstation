@@ -1,30 +1,29 @@
 import {
-    ADD_ROOM_FAIL,
-    ADD_ROOM_REQUEST,
-    ADD_ROOM_SUCCESS,
-    DELETE_ROOM_FAIL,
-    DELETE_ROOM_REQUEST,
-    DELETE_ROOM_RESET,
-    DELETE_ROOM_SUCCESS,
-    GET_ALL_ROOMS_FAIL,
-    GET_ALL_ROOMS_REQUEST,
-    GET_ALL_ROOMS_RESET,
-    GET_ALL_ROOMS_SUCCESS,
-    GET_ROOM_FAIL,
-    GET_ROOM_REQUEST,
-    GET_ROOM_SUCCESS,
-    UPDATE_ROOM_FAIL,
-    UPDATE_ROOM_REQUEST,
-    UPDATE_ROOM_SUCCESS,
-} from '../constants/rooms';
+    ADD_DEVICE_FAIL,
+    ADD_DEVICE_REQUEST,
+    ADD_DEVICE_SUCCESS,
+    DELETE_DEVICE_FAIL,
+    DELETE_DEVICE_REQUEST,
+    DELETE_DEVICE_RESET,
+    DELETE_DEVICE_SUCCESS,
+    GET_DEVICE_FAIL,
+    GET_DEVICE_REQUEST,
+    GET_DEVICE_SUCCESS,
+    GET_ALL_DEVICES_FAIL,
+    GET_ALL_DEVICES_REQUEST,
+    GET_ALL_DEVICES_RESET,
+    GET_ALL_DEVICES_SUCCESS,
+    UPDATE_DEVICE_FAIL,
+    UPDATE_DEVICE_REQUEST,
+    UPDATE_DEVICE_SUCCESS,
+} from '../constants/device';
 import axios from 'axios';
 
 import env from '../env.json';
-
-export const getAllRooms = (page, limit) => async (dispatch, getState) => {
+export const getAllAgencys = (page, limit) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: GET_ALL_ROOMS_REQUEST,
+            type: GET_ALL_DEVICES_REQUEST,
         });
 
         const {
@@ -39,33 +38,58 @@ export const getAllRooms = (page, limit) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.get(
-            env.BASE_HOST + `/rooms?page=${page}&limit=${limit}`,
+            env.BASE_HOST + `/agency/getAll?page=${page}&limit=${limit}`,
             config
         );
-
-        if (data.success) {
-            dispatch({
-                type: GET_ALL_ROOMS_SUCCESS,
-                payload: data.rooms,
-            });
-        } else {
-            dispatch({
-                type: GET_ALL_ROOMS_FAIL,
-                payload: data.error,
-            });
-        }
+        dispatch({
+            type: GET_ALL_DEVICES_SUCCESS,
+            payload: data,
+        });
     } catch (error) {
         dispatch({
-            type: GET_ALL_ROOMS_FAIL,
+            type: GET_ALL_DEVICES_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const getRoom = (id) => async (dispatch, getState) => {
+// export const getAllAgencyRequests = (page, limit) => async (dispatch, getState) => {
+//     try {
+//         dispatch({
+//             type: GET_ALL_AGENCY_REQUESTS_REQUEST,
+//         });
+
+//         const {
+//             login: { userInfo },
+//         } = getState();
+
+//         const config = {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 Authorization: `Bearer ${userInfo.auth_token}`,
+//             },
+//         };
+
+//         const { data } = await axios.get(
+//             env.BASE_HOST + `/agency/getAll?page=${page}&limit=${limit}`,
+//             config
+//         );
+//         dispatch({
+//             type: GET_ALL_AGENCY_REQUESTS_SUCCESS,
+//             payload: data,
+//         });
+//     } catch (error) {
+//         dispatch({
+//             type: GET_ALL_AGENCY_REQUESTS_FAIL,
+//             payload: error.response.data.error || error.response.data.errors,
+//         });
+//     }
+// };
+
+export const getAgency = (id) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: GET_ROOM_REQUEST,
+            type: GET_DEVICE_REQUEST,
         });
 
         const {
@@ -80,33 +104,31 @@ export const getRoom = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.get(
-            env.BASE_HOST + `/rooms/${id}`,
+            env.BASE_HOST + `/agency/getAgency/${id}`,
             config
         );
         dispatch({
-            type: GET_ROOM_SUCCESS,
-            payload: data.room,
+            type: GET_DEVICE_SUCCESS,
+            payload: data,
         });
     } catch (error) {
         dispatch({
-            type: GET_ROOM_FAIL,
+            type: GET_DEVICE_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const addRoom = (body) => async (dispatch, getState) => {
-    body.private = body.private === 'true' ? true : false;
+export const addAgency = (body) => async (dispatch, getState) => {
     for (let key in body) {
         if (body[key] === '') {
             body[key] = undefined;
         }
     }
-    body.password = body.private === false ? undefined : body.password;
-
+    console.log(body);
     try {
         dispatch({
-            type: ADD_ROOM_REQUEST,
+            type: ADD_DEVICE_REQUEST,
         });
 
         const {
@@ -121,48 +143,39 @@ export const addRoom = (body) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.post(
-            env.BASE_HOST + '/rooms',
+            env.BASE_HOST + '/agency/create',
             body,
             config
         );
 
-        if (data.success) {
+        if (data) {
             dispatch({
-                type: ADD_ROOM_SUCCESS,
-                payload: data.rooms,
+                type: ADD_DEVICE_SUCCESS,
+                payload: data,
             });
             dispatch({
-                type: GET_ALL_ROOMS_RESET,
-            });
-        } else {
-            dispatch({
-                type: ADD_ROOM_FAIL,
-                payload: data.error,
+                type: GET_ALL_DEVICES_RESET,
             });
         }
     } catch (error) {
         dispatch({
-            type: ADD_ROOM_FAIL,
+            type: ADD_DEVICE_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const updateRoom = (id, body) => async (dispatch, getState) => {
-    // turn the string to boolian
-    body.private = body.private === 'true' ? true : false;
+export const updateAgency = (id, body) => async (dispatch, getState) => {
     for (let key in body) {
         if (body[key] === '') {
             body[key] = undefined;
         }
     }
-    body.password = body.private === false ? undefined : body.password;
-
     console.log(body);
 
     try {
         dispatch({
-            type: UPDATE_ROOM_REQUEST,
+            type: UPDATE_DEVICE_REQUEST,
         });
 
         const {
@@ -176,37 +189,37 @@ export const updateRoom = (id, body) => async (dispatch, getState) => {
             },
         };
         const { data } = await axios.put(
-            env.BASE_HOST + `/rooms/${id}`,
+            env.BASE_HOST + `/agency/${id}`,
             body,
             config
         );
 
         if (data.success) {
             dispatch({
-                type: UPDATE_ROOM_SUCCESS,
-                payload: data.room,
+                type: UPDATE_DEVICE_SUCCESS,
+                payload: data.agency,
             });
             dispatch({
-                type: GET_ALL_ROOMS_RESET,
+                type: GET_ALL_DEVICES_RESET,
             });
         } else {
             dispatch({
-                type: UPDATE_ROOM_FAIL,
+                type: UPDATE_DEVICE_FAIL,
                 payload: data.error,
             });
         }
     } catch (error) {
         dispatch({
-            type: UPDATE_ROOM_FAIL,
+            type: UPDATE_DEVICE_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const deleteRoom = (id) => async (dispatch, getState) => {
+export const deleteAgency = (id) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: DELETE_ROOM_REQUEST,
+            type: DELETE_DEVICE_REQUEST,
         });
 
         const {
@@ -221,30 +234,30 @@ export const deleteRoom = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.delete(
-            env.BASE_HOST + `/rooms/${id}`,
+            env.BASE_HOST + `/agency/${id}`,
             config
         );
 
         if (data.success) {
             dispatch({
-                type: DELETE_ROOM_SUCCESS,
-                payload: data.rooms,
+                type: DELETE_DEVICE_SUCCESS,
+                payload: data.agency,
             });
             setTimeout(() => {
-                dispatch({ type: DELETE_ROOM_RESET });
+                dispatch({ type: DELETE_DEVICE_RESET });
                 dispatch({
-                    type: GET_ALL_ROOMS_RESET,
+                    type: GET_ALL_DEVICES_RESET,
                 });
             }, 600);
         } else {
             dispatch({
-                type: DELETE_ROOM_FAIL,
+                type: DELETE_DEVICE_FAIL,
                 payload: data.error,
             });
         }
     } catch (error) {
         dispatch({
-            type: DELETE_ROOM_FAIL,
+            type: DELETE_DEVICE_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }

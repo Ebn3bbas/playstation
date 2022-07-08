@@ -17,17 +17,16 @@ import {
     getAllRoomsReducer,
     getRoomReducer,
     updateRoomReducer,
-} from './reducers/rooms';
+} from './reducers/sessions';
 import { getAllStoreReducer } from './reducers/store';
-import { getAllResellersReducer } from './reducers/resellers';
+
 import {
     addAgencyReducer,
     deleteAgencyReducer,
     getAgencyReducer,
     getAllAgencysReducer,
     updateAgencyReducer,
-} from './reducers/agency';
-import { getAllCategoriesReducer } from './reducers/productCategorys';
+} from './reducers/device';
 
 const reducer = combineReducers({
     allUsers: getAllUsersReducer,
@@ -39,8 +38,6 @@ const reducer = combineReducers({
     deleteUser: deleteUserReducer,
     getUser: getUserReducer,
 
-    // Resellers
-    allResellers: getAllResellersReducer,
     //  rooms
     allRooms: getAllRoomsReducer,
     getRoom: getRoomReducer,
@@ -55,8 +52,7 @@ const reducer = combineReducers({
     deleteAgency: deleteAgencyReducer,
     // store
     allStores: getAllStoreReducer,
-    // productCategory
-    allCategories: getAllCategoriesReducer,
+
 });
 
 // const userInfoFormStorge = localStorage.getItem('userInfo')

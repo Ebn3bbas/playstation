@@ -6,7 +6,7 @@ import Image from '../../../components/Image/Image';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getAgency } from '../../../actions/agency';
+import { getAgency } from '../../../actions/device';
 import Error from '../../../components/Error/Error';
 
 const DevicesDetails = ({ listName }) => {

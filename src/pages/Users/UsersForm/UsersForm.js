@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import { addRoom, updateRoom } from '../../../actions/rooms';
 import { addUser, updateUser } from '../../../actions/users';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
@@ -85,17 +84,16 @@ const UsersForm = ({ isNew }) => {
                     <Input label='Email' name='email' type='email' />
                     <Input label='Password' name='password' type='password' />
                     <Input label='Age' name='age' />
-                    <Input label='Country' name='country' />
                     <Select
                         label='Gender'
                         name='gender'
                         options={['Male', 'Female', 'Other']}
                     />
-                    <Input label='Phone' name='phone' />
+                    <Input label='Phone' type='number' name='phone' />
                     <Select
                         label='Role'
                         name='role'
-                        options={['user', 'admin', 'reseller']}
+                        options={['user', 'admin']}
                     />
                 </Form>
             </div>

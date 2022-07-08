@@ -2,17 +2,12 @@ import Devices from '../pages/Devices/Devices';
 import DevicesDetails from '../pages/Devices/DevicesDetails/DevicesDetails';
 import DevicesForm from '../pages/Devices/DevicesForm/DevicesForm';
 import Login from '../pages/Login/Login';
-import ProductCategorys from '../pages/ProductCategorys/ProductCategorys';
-import ProductCategorysDetails from '../pages/ProductCategorys/ProductCategorysDetails/ProductCategorysDetails';
-import ProductCategorysForm from '../pages/ProductCategorys/ProductCategorysForm/ProductCategorysForm';
 import Profile from '../pages/Profile/Profile';
 import Register from '../pages/Register/Register';
 import Sessions from '../pages/Sessions/Sessions';
 import SessionsDetails from '../pages/Sessions/SessionsDetails/SessionsDetails';
 import SessionsForm from '../pages/Sessions/SessionsForm/SessionsForm';
 import Settings from '../pages/Settings/Settings';
-import SettingsForm from '../pages/Settings/SettingsForm/SettingsForm';
-import Statistics from '../pages/Statistics/Statistics';
 import Store from '../pages/Store/Store';
 import StoreDetails from '../pages/Store/StoreDetails/StoreDetails';
 import StoreForm from '../pages/Store/StoreForm/StoreForm';
@@ -23,7 +18,7 @@ import UsersForm from '../pages/Users/UsersForm/UsersForm';
 const routes = [
     {
         path: '/',
-        element: <Statistics />,
+        element: <Sessions />,
     },
     {
         path: '/login',
@@ -70,22 +65,6 @@ const routes = [
         element: <DevicesDetails />,
     },
     {
-        path: '/product-categorys',
-        element: <ProductCategorys />,
-    },
-    {
-        path: '/product-categorys-create-form',
-        element: <ProductCategorysForm isNew={true} />,
-    },
-    {
-        path: '/product-categorys-update-form',
-        element: <ProductCategorysForm isNew={false} />,
-    },
-    {
-        path: '/product-categorys-details/:id',
-        element: <ProductCategorysDetails />,
-    },
-    {
         path: '/sessions',
         element: <Sessions />,
     },
@@ -102,33 +81,26 @@ const routes = [
         element: <SessionsDetails />,
     },
     {
-        path: '/drinks',
+        path: '/store',
         element: <Store />,
     },
     {
-        path: '/drinks-create-form',
+        path: '/store-create-form',
         element: <StoreForm isNew={true} />,
     },
     {
-        path: '/drinks-update-form',
+        path: '/store-update-form',
         element: <StoreForm isNew={false} />,
     },
     {
-        path: '/drinks-details/:id',
+        path: '/store-details/:id',
         element: <StoreDetails />,
     },
     {
         path: '/settings',
         element: <Settings />,
     },
-    {
-        path: '/settings-create-form',
-        element: <SettingsForm isNew={true} />,
-    },
-    {
-        path: '/settings-update-form',
-        element: <SettingsForm isNew={false} />,
-    },
+    
 ];
 
 export default routes;

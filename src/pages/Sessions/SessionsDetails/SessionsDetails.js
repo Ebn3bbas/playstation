@@ -5,7 +5,7 @@ import List from '../../../components/List/List';
 import Image from '../../../components/Image/Image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getRoom } from '../../../actions/rooms';
+import { getRoom } from '../../../actions/sessions';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 

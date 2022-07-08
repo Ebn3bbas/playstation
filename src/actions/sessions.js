@@ -1,29 +1,30 @@
 import {
-    ADD_AGENCY_FAIL,
-    ADD_AGENCY_REQUEST,
-    ADD_AGENCY_SUCCESS,
-    DELETE_AGENCY_FAIL,
-    DELETE_AGENCY_REQUEST,
-    DELETE_AGENCY_RESET,
-    DELETE_AGENCY_SUCCESS,
-    GET_AGENCY_FAIL,
-    GET_AGENCY_REQUEST,
-    GET_AGENCY_SUCCESS,
-    GET_ALL_AGENCYS_FAIL,
-    GET_ALL_AGENCYS_REQUEST,
-    GET_ALL_AGENCYS_RESET,
-    GET_ALL_AGENCYS_SUCCESS,
-    UPDATE_AGENCY_FAIL,
-    UPDATE_AGENCY_REQUEST,
-    UPDATE_AGENCY_SUCCESS,
-} from '../constants/agency';
+    ADD_SESSION_FAIL,
+    ADD_SESSION_REQUEST,
+    ADD_SESSION_SUCCESS,
+    DELETE_SESSION_FAIL,
+    DELETE_SESSION_REQUEST,
+    DELETE_SESSION_RESET,
+    DELETE_SESSION_SUCCESS,
+    GET_ALL_SESSIONS_FAIL,
+    GET_ALL_SESSIONS_REQUEST,
+    GET_ALL_SESSIONS_RESET,
+    GET_ALL_SESSIONS_SUCCESS,
+    GET_SESSION_FAIL,
+    GET_SESSION_REQUEST,
+    GET_SESSION_SUCCESS,
+    UPDATE_SESSION_FAIL,
+    UPDATE_SESSION_REQUEST,
+    UPDATE_SESSION_SUCCESS,
+} from '../constants/sessions';
 import axios from 'axios';
 
 import env from '../env.json';
-export const getAllAgencys = (page, limit) => async (dispatch, getState) => {
+
+export const getAllRooms = (page, limit) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: GET_ALL_AGENCYS_REQUEST,
+            type: GET_ALL_SESSIONS_REQUEST,
         });
 
         const {
@@ -38,58 +39,33 @@ export const getAllAgencys = (page, limit) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.get(
-            env.BASE_HOST + `/agency/getAll?page=${page}&limit=${limit}`,
+            env.BASE_HOST + `/rooms?page=${page}&limit=${limit}`,
             config
         );
-        dispatch({
-            type: GET_ALL_AGENCYS_SUCCESS,
-            payload: data,
-        });
+
+        if (data.success) {
+            dispatch({
+                type: GET_ALL_SESSIONS_SUCCESS,
+                payload: data.rooms,
+            });
+        } else {
+            dispatch({
+                type: GET_ALL_SESSIONS_FAIL,
+                payload: data.error,
+            });
+        }
     } catch (error) {
         dispatch({
-            type: GET_ALL_AGENCYS_FAIL,
+            type: GET_ALL_SESSIONS_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-// export const getAllAgencyRequests = (page, limit) => async (dispatch, getState) => {
-//     try {
-//         dispatch({
-//             type: GET_ALL_AGENCY_REQUESTS_REQUEST,
-//         });
-
-//         const {
-//             login: { userInfo },
-//         } = getState();
-
-//         const config = {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Authorization: `Bearer ${userInfo.auth_token}`,
-//             },
-//         };
-
-//         const { data } = await axios.get(
-//             env.BASE_HOST + `/agency/getAll?page=${page}&limit=${limit}`,
-//             config
-//         );
-//         dispatch({
-//             type: GET_ALL_AGENCY_REQUESTS_SUCCESS,
-//             payload: data,
-//         });
-//     } catch (error) {
-//         dispatch({
-//             type: GET_ALL_AGENCY_REQUESTS_FAIL,
-//             payload: error.response.data.error || error.response.data.errors,
-//         });
-//     }
-// };
-
-export const getAgency = (id) => async (dispatch, getState) => {
+export const getRoom = (id) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: GET_AGENCY_REQUEST,
+            type: GET_SESSION_REQUEST,
         });
 
         const {
@@ -104,31 +80,33 @@ export const getAgency = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.get(
-            env.BASE_HOST + `/agency/getAgency/${id}`,
+            env.BASE_HOST + `/rooms/${id}`,
             config
         );
         dispatch({
-            type: GET_AGENCY_SUCCESS,
-            payload: data,
+            type: GET_SESSION_SUCCESS,
+            payload: data.room,
         });
     } catch (error) {
         dispatch({
-            type: GET_AGENCY_FAIL,
+            type: GET_SESSION_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const addAgency = (body) => async (dispatch, getState) => {
+export const addRoom = (body) => async (dispatch, getState) => {
+    body.private = body.private === 'true' ? true : false;
     for (let key in body) {
         if (body[key] === '') {
             body[key] = undefined;
         }
     }
-    console.log(body);
+    body.password = body.private === false ? undefined : body.password;
+
     try {
         dispatch({
-            type: ADD_AGENCY_REQUEST,
+            type: ADD_SESSION_REQUEST,
         });
 
         const {
@@ -143,39 +121,48 @@ export const addAgency = (body) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.post(
-            env.BASE_HOST + '/agency/create',
+            env.BASE_HOST + '/rooms',
             body,
             config
         );
 
-        if (data) {
+        if (data.success) {
             dispatch({
-                type: ADD_AGENCY_SUCCESS,
-                payload: data,
+                type: ADD_SESSION_SUCCESS,
+                payload: data.rooms,
             });
             dispatch({
-                type: GET_ALL_AGENCYS_RESET,
+                type: GET_ALL_SESSIONS_RESET,
+            });
+        } else {
+            dispatch({
+                type: ADD_SESSION_FAIL,
+                payload: data.error,
             });
         }
     } catch (error) {
         dispatch({
-            type: ADD_AGENCY_FAIL,
+            type: ADD_SESSION_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const updateAgency = (id, body) => async (dispatch, getState) => {
+export const updateRoom = (id, body) => async (dispatch, getState) => {
+    // turn the string to boolian
+    body.private = body.private === 'true' ? true : false;
     for (let key in body) {
         if (body[key] === '') {
             body[key] = undefined;
         }
     }
+    body.password = body.private === false ? undefined : body.password;
+
     console.log(body);
 
     try {
         dispatch({
-            type: UPDATE_AGENCY_REQUEST,
+            type: UPDATE_SESSION_REQUEST,
         });
 
         const {
@@ -189,37 +176,37 @@ export const updateAgency = (id, body) => async (dispatch, getState) => {
             },
         };
         const { data } = await axios.put(
-            env.BASE_HOST + `/agency/${id}`,
+            env.BASE_HOST + `/rooms/${id}`,
             body,
             config
         );
 
         if (data.success) {
             dispatch({
-                type: UPDATE_AGENCY_SUCCESS,
-                payload: data.agency,
+                type: UPDATE_SESSION_SUCCESS,
+                payload: data.room,
             });
             dispatch({
-                type: GET_ALL_AGENCYS_RESET,
+                type: GET_ALL_SESSIONS_RESET,
             });
         } else {
             dispatch({
-                type: UPDATE_AGENCY_FAIL,
+                type: UPDATE_SESSION_FAIL,
                 payload: data.error,
             });
         }
     } catch (error) {
         dispatch({
-            type: UPDATE_AGENCY_FAIL,
+            type: UPDATE_SESSION_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }
 };
 
-export const deleteAgency = (id) => async (dispatch, getState) => {
+export const deleteRoom = (id) => async (dispatch, getState) => {
     try {
         dispatch({
-            type: DELETE_AGENCY_REQUEST,
+            type: DELETE_SESSION_REQUEST,
         });
 
         const {
@@ -234,30 +221,30 @@ export const deleteAgency = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.delete(
-            env.BASE_HOST + `/agency/${id}`,
+            env.BASE_HOST + `/rooms/${id}`,
             config
         );
 
         if (data.success) {
             dispatch({
-                type: DELETE_AGENCY_SUCCESS,
-                payload: data.agency,
+                type: DELETE_SESSION_SUCCESS,
+                payload: data.rooms,
             });
             setTimeout(() => {
-                dispatch({ type: DELETE_AGENCY_RESET });
+                dispatch({ type: DELETE_SESSION_RESET });
                 dispatch({
-                    type: GET_ALL_AGENCYS_RESET,
+                    type: GET_ALL_SESSIONS_RESET,
                 });
             }, 600);
         } else {
             dispatch({
-                type: DELETE_AGENCY_FAIL,
+                type: DELETE_SESSION_FAIL,
                 payload: data.error,
             });
         }
     } catch (error) {
         dispatch({
-            type: DELETE_AGENCY_FAIL,
+            type: DELETE_SESSION_FAIL,
             payload: error.response.data.error || error.response.data.errors,
         });
     }

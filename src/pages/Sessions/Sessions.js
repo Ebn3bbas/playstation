@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { deleteRoom, getAllRooms } from '../../actions/rooms';
+import { deleteRoom, getAllRooms } from '../../actions/sessions';
 import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import EditButton from '../../components/Buttons/EditButton/EditButton';
 import Table from '../../components/Table/Table';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sessions.module.css';
 import Error from '../../components/Error/Error';
-import { DELETE_ROOM_RESET, GET_ALL_ROOMS_RESET } from '../../constants/rooms';
 import Success from '../../components/Success/Success';
 
 const Sessions = () => {
@@ -32,14 +31,15 @@ const Sessions = () => {
         success: deleteSuccess,
         error: deleteError,
     } = useSelector((state) => state.deleteRoom);
-    console.log(rooms);
+    
     useEffect(() => {
         dispatch(getAllRooms(currentPage, limit));
     }, [dispatch, currentPage, limit, deleteLoading]);
-    const columns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete'];
+    const columns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete' , 'time'];
+    const Endedcolumns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete'];
     const data = [];
 
-    console.log(rooms?.rooms);
+    
 
     if (rooms && rooms?.rooms?.length !== 0) {
         for (let r in rooms.rooms) {
@@ -105,7 +105,7 @@ const Sessions = () => {
                     />
                     <Table
                         data={data}
-                        columns={columns}
+                        columns={Endedcolumns}
                         tableName='Ended Sessions'
                         showDetails={true}
                         addNewButton={false}

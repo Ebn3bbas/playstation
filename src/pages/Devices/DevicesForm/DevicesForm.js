@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import { addAgency, updateAgency } from '../../../actions/agency';
+import { addAgency, updateAgency } from '../../../actions/device';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 import Form from '../../../components/Form/Form';
@@ -9,9 +9,9 @@ import Input from '../../../components/Form/Input/Input';
 import Select from '../../../components/Form/Select/Select';
 import Success from '../../../components/Success/Success';
 import {
-    ADD_AGENCY_RESET,
-    UPDATE_AGENCY_RESET,
-} from '../../../constants/agency';
+    ADD_DEVICE_RESET,
+    UPDATE_DEVICE_RESET,
+} from '../../../constants/device';
 import styles from './DevicesForm.module.css';
 
 const initialState = {
@@ -45,7 +45,7 @@ const DevicesForm = ({ isNew }) => {
         if (success) {
             setTimeout(() => {
                 dispatch({
-                    type: isNew ? ADD_AGENCY_RESET : UPDATE_AGENCY_RESET,
+                    type: isNew ? ADD_DEVICE_RESET : UPDATE_DEVICE_RESET,
                 });
                 navigate('/devices');
             }, 600);
@@ -75,11 +75,16 @@ const DevicesForm = ({ isNew }) => {
                     submitHandler={submitHandler}
                     isNew={isNew}
                     formName='Devices'
-                    button={"Submit"}
+                    button={"Add"}
                 >
                     <Input label='Name' name='name' />
-                    <Input label='Description' name='description' />
-                    <Input label='Avatar' type='file' name='avatar' />
+                    <Select
+                        label='Type'
+                        name='type'
+                        options={['ps3', 'ps4', 'ps5']}
+                        mult={false}
+                    />
+                    
                 </Form>
             </div>
         </>

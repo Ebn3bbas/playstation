@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import { addRoom, updateRoom } from '../../../actions/rooms';
+import { addRoom, updateRoom } from '../../../actions/sessions';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 import Form from '../../../components/Form/Form';
 import Input from '../../../components/Form/Input/Input';
 import Select from '../../../components/Form/Select/Select';
 import Success from '../../../components/Success/Success';
-import { ADD_ROOM_RESET, UPDATE_ROOM_RESET } from '../../../constants/rooms';
+import { ADD_SESSION_RESET, UPDATE_SESSION_RESET } from '../../../constants/sessions';
 import styles from './SessionsForm.module.css';
 
 const initialState = {
@@ -35,6 +35,7 @@ const SessionsForm = ({ isNew }) => {
         } else {
             dispatch(updateRoom(params.id, form));
         }
+        
     };
 
     const { room, loading, success, error } = useSelector((state) => {
@@ -48,13 +49,15 @@ const SessionsForm = ({ isNew }) => {
     useEffect(() => {
         if (success) {
             setTimeout(() => {
-                dispatch({ type: isNew ? ADD_ROOM_RESET : UPDATE_ROOM_RESET });
+                dispatch({ type: isNew ? ADD_SESSION_RESET : UPDATE_SESSION_RESET });
                 navigate('/sessions');
             }, 600);
         }
     }, [success, navigate, dispatch, isNew]);
+
     return (
         <>
+    
             <div className={styles.back}>
                 <BackButton />
             </div>
@@ -73,37 +76,42 @@ const SessionsForm = ({ isNew }) => {
                     </Success>
                 )}
                 <Form
-                    initialState={initialState}
-                    submitHandler={submitHandler}
-                    isNew={isNew}
-                    formName='Session'
-                    button={"Start"}
+                initialState={initialState}
+                submitHandler={submitHandler}
+                isNew={isNew}
+                formName='Session'
+                button={"Start"}
                 >
+                    {isNew && (
+                    <>
                     <Input label='Name' name='room_name' />
-                    <Input label='Device' name='device' />
+                    <Input label='Hours' name='hours' />
+                    </>       )}
+                    <Select
+                        label='Device'
+                        name='device'
+                        options={[]}//not active Devices
+                        mult={false}
+                    />
                     <Select
                         label='Type'
                         name='type'
-                        options={["single", "Multi"]}
+                        options={["Single", "Multi"]}
+                        mult={false}
                     />
-
+                    
+                    
                     {!isNew && (
                         <>
+                            <Input label='Added Hours' name='added_hours' />
+
                             <Select
-                                label='Room Admins'
-                                name='room_admins'
-                                options={['1', '2', '3']}
+                                label='Drinks'
+                                name='drinks'
+                                options={[]}//All drinks
+                                mult={true}
                             />
-                            <Select
-                                label='Room Members'
-                                name='room_members'
-                                options={['1', '2', '3']}
-                            />
-                            <Select
-                                label='Room_Generas'
-                                name='room_generas'
-                                options={['1', '2', '3']}
-                            />
+                            
                         </>
                     )}
                 </Form>

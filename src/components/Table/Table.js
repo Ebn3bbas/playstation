@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Countdown from 'react-countdown';
 import { useNavigate } from 'react-router';
 import Pagination from './Pagination/Pagination';
 
@@ -19,14 +20,12 @@ const Table = ({
 
     const AddNewHandler = (e) => {
         e.preventDefault();
-        history(`/${tableName}-create-form`);
+        history(`/${ tableName }-create-form`);
     };
 
     const detailsHandler = (detailsId) => {
-        console.log(detailsId);
         history(`/${tableName}-details/${detailsId}`);
     };
-    console.log(limit);
     return (
         <div className={styles.tableContainer}>
             <div className={styles.tableName}>
@@ -50,7 +49,7 @@ const Table = ({
                 </thead>
                 <tbody className={styles.tableBody}>
                     {data.map((field, idx) => {
-                        console.log(field);
+                        
                         if (idx >= 10) return null;
                         else {
                             const fields = Object.values(field);
@@ -97,6 +96,7 @@ const Table = ({
                                             );
                                         }
                                     })}
+                                   {tableName==='Sessions' && <td><Countdown date={Date.now() + 10000} /></td>} 
                                 </tr>
                             );
                         }

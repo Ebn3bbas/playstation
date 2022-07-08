@@ -12,7 +12,7 @@ const Form = ({ children, initialState, submitHandler, isNew, formName ,button }
         e.preventDefault();
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
-        console.log(form);
+
     };
 
     return (

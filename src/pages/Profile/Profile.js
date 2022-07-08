@@ -51,6 +51,7 @@ const Profile = ({ isNew }) => {
                     submitHandler={submitHandler}
                     formName='Your Info'
                     isNew={isNew}
+                    button='Submit'
                 >
                     <Input label='Username' name='username' />
                     <Input label='Password' name='password' type='password' />

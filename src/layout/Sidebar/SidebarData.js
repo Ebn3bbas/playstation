@@ -1,19 +1,11 @@
 import {
     FaRestroom,
     FaUserFriends,
-    FaChartLine,
     FaStore,
     FaSlidersH,
-    FaClipboardList,
-    FaCubes,
 } from 'react-icons/fa';
 
 const links = [
-    {
-        name: 'Overview',
-        path: '/',
-        icon: <FaChartLine />,
-    },
     {
         name: 'Settings',
         path: '/settings',
@@ -35,8 +27,8 @@ const links = [
         icon: <FaRestroom />,
     },
     {
-        name: 'Drinks',
-        path: '/drinks',
+        name: 'Store',
+        path: '/store',
         icon: <FaStore />,
     },
 ];
