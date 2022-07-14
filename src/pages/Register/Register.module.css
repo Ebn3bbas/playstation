@@ -1,5 +1,12 @@
 .RegisterContainer {
+  /* margin: calc((85% - 300.8px) / 4) auto; */
+  width: 32%;
+  margin: 6rem auto auto auto;
+}
+
+@media screen and (max-width: 1350px) {
+  .RegisterContainer {
     /* margin: calc((85% - 300.8px) / 4) auto; */
-    width: 32%;
-    margin: 6rem auto auto auto;
+    width: 70%;
+  }
 }

@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import styles from './Form.module.css';
 
 export const FormContext = createContext({
-    form: {},
+    form: {}, // data look in provider
 });
 
 const Form = ({ children, initialState, submitHandler, isNew, formName ,button }) => {
