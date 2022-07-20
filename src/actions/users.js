@@ -43,14 +43,11 @@ export const getAllUsers = (page, limit) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.get(
-      url + `/users/getUsers?page=${page}&limit=${limit}&role=user`,
-      config
-    );
+    const { data } = await axios.get(url + `/users/storeusers/`, config);
     dispatch({
       type: GET_ALL_USERS_SUCCESS,
       payload: data,
@@ -76,11 +73,11 @@ export const getUser = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.get(url + `/users/getUserById/${id}`, config);
+    const { data } = await axios.get(url + `/users/${id}/`, config);
     dispatch({
       type: GET_USER_SUCCESS,
       payload: data,
@@ -98,14 +95,13 @@ export const login = (form) => async (dispatch) => {
     dispatch({
       type: LOGIN_REQUEST,
     });
-
+    console.log(form);
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-
-    const { data } = await axios.post(url + "/users/login", form, config);
+    const { data } = await axios.post(url + "/users/login/", form, config);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,
@@ -131,7 +127,7 @@ export const register = (form) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post(url + "/users/register", form, config);
+    const { data } = await axios.post(url + "/users/register/", form, config);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: data,
@@ -145,8 +141,7 @@ export const register = (form) => async (dispatch) => {
     const user = JSON.stringify(data);
 
     localStorage.setItem("userInfo", {
-      auth_token: user.auth_token,
-      info: user.resutl,
+      token: user.token,
     });
   } catch (error) {
     dispatch({
@@ -164,17 +159,16 @@ export const logout = () => async (dispatch, getState) => {
       login: { userInfo },
     } = getState();
 
-    console.log(userInfo);
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // };
+    // const { data } = await axios.post(url + "/users/logout/", {}, config);
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
-      },
-    };
-    const { data } = await axios.post(url + "/users/logout", {}, config);
     localStorage.removeItem("userInfo");
-    dispatch({ type: LOGOUT_SUCCESS, payload: data });
+    dispatch({ type: LOGOUT_SUCCESS, payload: {} });
     dispatch({ type: LOGIN_RESET });
   } catch (error) {
     dispatch({
@@ -203,16 +197,16 @@ export const addUser = (body) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
     const { data } = await axios.post(
-      env.BASE_HOST + "/users/register",
+      env.BASE_HOST + "/users/createuser/",
       body,
       config
     );
-
+    console.log(data);
     if (data) {
       dispatch({
         type: ADD_USER_SUCCESS,
@@ -230,6 +224,56 @@ export const addUser = (body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_USER_FAIL,
+      payload: error.response.data.error || error.response.data.errors,
+    });
+  }
+};
+
+export const updateUserProfile = (id, body) => async (dispatch, getState) => {
+  for (let key in body) {
+    if (body[key] === "") {
+      body[key] = undefined;
+    }
+  }
+
+  try {
+    dispatch({
+      type: UPDATE_USER_REQUEST,
+    });
+
+    const {
+      login: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      env.BASE_HOST + `/users/profile/update/`,
+      body,
+      config
+    );
+
+    if (data) {
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: data.user,
+      });
+      dispatch({
+        type: GET_ALL_USERS_RESET,
+      });
+    } else {
+      dispatch({
+        type: UPDATE_USER_FAIL,
+        payload: data.error,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: UPDATE_USER_FAIL,
       payload: error.response.data.error || error.response.data.errors,
     });
   }
@@ -254,11 +298,11 @@ export const updateUser = (id, body) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
     const { data } = await axios.put(
-      env.BASE_HOST + `/users/updateUser/${id}`,
+      env.BASE_HOST + `/users/update/${id}/`,
       body,
       config
     );
@@ -298,12 +342,12 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.auth_token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
     const { data } = await axios.delete(
-      env.BASE_HOST + `/users/delete/${id}`,
+      env.BASE_HOST + `/users/delete/${id}/`,
       config
     );
 

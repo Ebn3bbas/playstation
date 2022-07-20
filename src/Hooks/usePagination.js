@@ -34,7 +34,7 @@ export const usePagination = ({
       totalPageCount
     );
 
-    console.log(leftSiblingIndex, rightSiblingIndex);
+    // console.log(leftSiblingIndex, rightSiblingIndex);
 
     /*
       We do not want to show dots if there is only one position left 
@@ -69,7 +69,7 @@ export const usePagination = ({
     }
   }, [totalCount, pageSize, siblingCount, currentPage]);
 
-  console.log(paginationRange);
+  // console.log(paginationRange);
 
   return paginationRange;
 };

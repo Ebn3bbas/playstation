@@ -4,25 +4,25 @@ import Image from "../../components/Image/Image";
 import styles from "./Profile.module.css";
 import profilePic from "../../utils/images/profilePic.jpg";
 import Input from "../../components/Form/Input/Input";
-import Select from "../../components/Form/Select/Select";
 import Error from "../../components/Error/Error";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../actions/users";
+import { updateUserProfile } from "../../actions/users";
 import Success from "../../components/Success/Success";
 
-const initialState = {
-  username: undefined,
-  password: undefined,
-  phone_number: undefined,
-  email: undefined,
-};
 const Profile = ({ isNew }) => {
+  const userI = JSON.parse(localStorage.getItem("userInfo"));
+  const initialState = {
+    username: userI?.username,
+    password: undefined,
+    phone_number: userI?.phone_number,
+    email: userI?.email,
+  };
   const dispatch = useDispatch();
-
+  console.log(userI);
   const { userInfo } = useSelector((state) => state.login);
   const submitHandler = (e, form) => {
     e.preventDefault();
-    dispatch(updateUser(userInfo?.info?._id, form));
+    dispatch(updateUserProfile(userInfo?.id, form));
   };
 
   const { user, loading, success, error } = useSelector(
@@ -31,14 +31,6 @@ const Profile = ({ isNew }) => {
 
   return (
     <div className={styles.detailsContainer}>
-      <div className={styles.image}>
-        <h3>Name</h3>
-        <Image
-          className={styles.detailsImg}
-          img={profilePic}
-          alt="profilePic"
-        />
-      </div>
       <div className={styles.form}>
         {error &&
           (Array.isArray(error) ? (

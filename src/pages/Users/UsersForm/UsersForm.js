@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { addUser, updateUser } from "../../../actions/users";
@@ -12,10 +13,11 @@ import styles from "./UsersForm.module.css";
 
 const initialState = {
   username: undefined,
-  password: undefined,
+  password: "",
   phone_number: undefined,
   email: undefined,
 };
+
 const UsersForm = ({ isNew }) => {
   const dispatch = useDispatch();
   const params = useParams();

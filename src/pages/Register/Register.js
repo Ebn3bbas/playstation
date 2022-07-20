@@ -32,12 +32,12 @@ const Register = ({ isNew }) => {
 
   const submitHandler = (e, form) => {
     e.preventDefault();
-    if (form.password !== form.confirm_password) {
-      setMessage("Passwords do not match");
-    } else {
-      dispatch(register(form));
-      setMessage(null);
-    }
+    // if (form.password !== form.confirm_password) {
+    //   setMessage("Passwords do not match");
+    // } else {
+    dispatch(register(form));
+    setMessage(null);
+    // }
   };
 
   return (

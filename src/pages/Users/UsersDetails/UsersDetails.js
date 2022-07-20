@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 import BackButton from "../../../components/Buttons/BackButton/BackButton";
 import Error from "../../../components/Error/Error";
 
-const UsersDetails = ({ listName }) => {
+const UsersDetails = () => {
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -19,7 +19,7 @@ const UsersDetails = ({ listName }) => {
     dispatch(getUser(params.id));
   }, [dispatch, params]);
   const data = [
-    { name: "Name", value: user?.first_name + " " + user?.last_name },
+    { name: "Name", value: user?.username },
     { name: "Email", value: user?.email },
     { name: "Phone", value: user?.phone_number },
   ];

@@ -12,7 +12,6 @@ import Success from "../../components/Success/Success";
 const Users = () => {
   let limit = 10;
   const [currentPage, setCurrentPage] = useState(1);
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const updateHandler = (id) => {
@@ -23,41 +22,30 @@ const Users = () => {
   };
 
   const { users, loading, error } = useSelector((state) => state.allUsers);
-  console.log(users);
   const {
     room: deletedRoom,
     loading: deleteLoading,
     success: deleteSuccess,
     error: deleteError,
   } = useSelector((state) => state.deleteUser);
-  console.log(users);
   useEffect(() => {
-    dispatch(getAllUsers(currentPage, limit));
+    dispatch(getAllUsers(7, 7));
   }, [dispatch, currentPage, limit]);
-
-  const columns = ["ID", "First Name", "email", "isActive", "edit", "delete"];
+  console.log(users);
+  const columns = ["ID", "User Name", "Email", "Edit", "Delete"];
 
   const data = [];
 
-  if (users?.users?.length !== 0) {
-    for (let u in users?.users) {
+  if (users?.length !== 0) {
+    for (let u in users) {
       data.push({
-        _id: users?.users[u]?._id,
-        ID: users?.users[u]?._id || "no data",
-        "First Name": users?.users[u]?.first_name || "no data",
-        "Last Name": users?.users[u]?.last_name || "no data",
-        email: users?.users[u]?.email || "no data",
-        gender: users?.users[u]?.gender || "no data",
-        isActive: users?.users[u]?.isActive?.toString() || "no data",
-        edit: (
-          <EditButton
-            updateHandler={() => updateHandler(users?.users[u]?._id)}
-          />
-        ),
-        delete: (
-          <DeleteButton
-            deleteHandler={() => deleteHandler(users?.users[u]?._id)}
-          />
+        id: users[u]?.id,
+        ID: users[u]?.id || "no data",
+        "User Name": users[u]?.username || "no data",
+        Email: users[u]?.email || "no data",
+        Edit: <EditButton updateHandler={() => updateHandler(users[u]?.id)} />,
+        Delete: (
+          <DeleteButton deleteHandler={() => deleteHandler(users[u]?.id)} />
         ),
       });
     }
@@ -86,7 +74,7 @@ const Users = () => {
             data={data}
             columns={columns}
             tableName="Users"
-            showDetails={true}
+            showDetails={false}
             addNewButton={true}
             pageChangeHandler={pageChangeHandler}
             currentPage={currentPage}
