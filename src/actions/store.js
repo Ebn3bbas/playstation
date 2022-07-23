@@ -81,11 +81,6 @@ export const getStore = (id) => async (dispatch, getState) => {
 };
 
 export const addStore = (body) => async (dispatch, getState) => {
-  for (let key in body) {
-    if (body[key] === "") {
-      body[key] = undefined;
-    }
-  }
   try {
     dispatch({
       type: ADD_STORE_REQUEST,
@@ -108,7 +103,7 @@ export const addStore = (body) => async (dispatch, getState) => {
       config
     );
 
-    if (data) {
+    if (data.success) {
       dispatch({
         type: ADD_STORE_SUCCESS,
         payload: data,
@@ -157,7 +152,7 @@ export const updateStore = (id, body) => async (dispatch, getState) => {
     if (data.success) {
       dispatch({
         type: UPDATE_STORE_SUCCESS,
-        payload: data.device,
+        payload: data,
       });
       dispatch({
         type: GET_ALL_STORES_RESET,
@@ -197,11 +192,11 @@ export const deleteStore = (id) => async (dispatch, getState) => {
       env.BASE_HOST + `/products/delete/${id}/`,
       config
     );
-
+    console.log(data);
     if (data.success) {
       dispatch({
         type: DELETE_STORE_SUCCESS,
-        payload: data.device,
+        payload: data,
       });
       setTimeout(() => {
         dispatch({ type: DELETE_STORE_RESET });

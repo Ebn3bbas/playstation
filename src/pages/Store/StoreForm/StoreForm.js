@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { addStore } from "../../../actions/store";
 import BackButton from "../../../components/Buttons/BackButton/BackButton";
 import formStyles from "../../../components/Form/Form.module.css";
 import style from "../../../components/Form/Input/Input.module.css";
+import { ADD_USER_RESET } from "../../../constants/users";
 import styles from "./StoreForm.module.css";
+import Success from "../../../components/Success/Success";
+import Error from "../../../components/Error/Error";
 
 const StoreForm = ({ isNew }) => {
-  const [formValues, setFormValues] = useState([{ name: "", price: "" }]);
+  const [formValues, setFormValues] = useState([{ title: "", price: "" }]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -15,7 +23,7 @@ const StoreForm = ({ isNew }) => {
   };
 
   let addFormFields = () => {
-    setFormValues([...formValues, { name: "", price: "" }]);
+    setFormValues([...formValues, { title: "", price: "" }]);
   };
 
   let removeFormFields = (i) => {
@@ -26,15 +34,34 @@ const StoreForm = ({ isNew }) => {
 
   let handleSubmit = (event) => {
     event.preventDefault();
-    console.log(JSON.stringify(formValues));
+    for (let v in formValues) {
+      dispatch(addStore(formValues[v]));
+    }
   };
-
+  const { store, loading, success, error } = useSelector(
+    (state) => state.addStore
+  );
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        dispatch({ type: ADD_USER_RESET });
+        navigate("/store");
+      }, 600);
+    }
+  }, [success, navigate, dispatch]);
   return (
     <>
       <div className={styles.back}>
         <BackButton />
       </div>
       <div className={styles.StoreFormContainer}>
+        {error &&
+          (Array.isArray(error) ? (
+            error.map((e) => <Error>{e.msg}</Error>)
+          ) : (
+            <Error>{error}</Error>
+          ))}
+        {success && <Success>User created successfully</Success>}
         <form className={formStyles.formContainer} onSubmit={handleSubmit}>
           <table>
             <h2>
