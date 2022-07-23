@@ -84,7 +84,7 @@ const routes = [
     element: <StoreForm isNew={true} />,
   },
   {
-    path: "/store-update-form",
+    path: "/store-update-form/:id",
     element: <StoreForm isNew={false} />,
   },
   {

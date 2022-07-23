@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { addStore } from "../../../actions/store";
+import { useNavigate, useParams } from "react-router";
+import { addStore, updateStore } from "../../../actions/store";
 import BackButton from "../../../components/Buttons/BackButton/BackButton";
 import formStyles from "../../../components/Form/Form.module.css";
 import style from "../../../components/Form/Input/Input.module.css";
@@ -10,11 +10,13 @@ import { ADD_USER_RESET } from "../../../constants/users";
 import styles from "./StoreForm.module.css";
 import Success from "../../../components/Success/Success";
 import Error from "../../../components/Error/Error";
+import { ADD_STORE_RESET, UPDATE_STORE_RESET } from "../../../constants/store";
 
 const StoreForm = ({ isNew }) => {
   const [formValues, setFormValues] = useState([{ title: "", price: "" }]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
 
   let handleChange = (i, e) => {
     let newFormValues = [...formValues];
@@ -34,21 +36,29 @@ const StoreForm = ({ isNew }) => {
 
   let handleSubmit = (event) => {
     event.preventDefault();
-    for (let v in formValues) {
-      dispatch(addStore(formValues[v]));
+    if (isNew) {
+      for (let v in formValues) {
+        dispatch(addStore(formValues[v]));
+      }
+    } else {
+      dispatch(updateStore(params.id, formValues[0]));
     }
   };
-  const { store, loading, success, error } = useSelector(
-    (state) => state.addStore
-  );
+  const { store, loading, success, error } = useSelector((state) => {
+    if (isNew) {
+      return state.addStore;
+    } else {
+      return state.updateStore;
+    }
+  });
   useEffect(() => {
     if (success) {
       setTimeout(() => {
-        dispatch({ type: ADD_USER_RESET });
+        dispatch({ type: isNew ? ADD_STORE_RESET : UPDATE_STORE_RESET });
         navigate("/store");
       }, 600);
     }
-  }, [success, navigate, dispatch]);
+  }, [success, navigate, dispatch, isNew]);
   return (
     <>
       <div className={styles.back}>
@@ -104,9 +114,11 @@ const StoreForm = ({ isNew }) => {
                 ) : null}
               </tr>
             ))}
-            <button type="button" onClick={() => addFormFields()}>
-              Add
-            </button>
+            {isNew && (
+              <button type="button" onClick={() => addFormFields()}>
+                Add
+              </button>
+            )}
             <button className="button submit" type="submit">
               Submit
             </button>
