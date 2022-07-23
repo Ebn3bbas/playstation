@@ -31,21 +31,25 @@ const Users = () => {
   useEffect(() => {
     dispatch(getAllUsers(7, 7));
   }, [dispatch, currentPage, limit]);
-  console.log(users);
+  console.log(users?.rows);
   const columns = ["ID", "User Name", "Email", "Edit", "Delete"];
 
   const data = [];
 
-  if (users?.length !== 0) {
-    for (let u in users) {
+  if (users?.rows.length !== 0) {
+    for (let u in users?.rows) {
       data.push({
-        id: users[u]?.id,
-        ID: users[u]?.id || "no data",
-        "User Name": users[u]?.username || "no data",
-        Email: users[u]?.email || "no data",
-        Edit: <EditButton updateHandler={() => updateHandler(users[u]?.id)} />,
+        id: users?.rows[u].id,
+        ID: users?.rows[u].id || "no data",
+        "User Name": users?.rows[u].username || "no data",
+        Email: users?.rows[u].email || "no data",
+        Edit: (
+          <EditButton updateHandler={() => updateHandler(users?.rows[u].id)} />
+        ),
         Delete: (
-          <DeleteButton deleteHandler={() => deleteHandler(users[u]?.id)} />
+          <DeleteButton
+            deleteHandler={() => deleteHandler(users?.rows[u].id)}
+          />
         ),
       });
     }
@@ -78,7 +82,7 @@ const Users = () => {
             addNewButton={true}
             pageChangeHandler={pageChangeHandler}
             currentPage={currentPage}
-            dataCount={users?.usersCount}
+            dataCount={users?.count}
             limit={limit}
           />
         )}

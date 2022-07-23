@@ -23,7 +23,7 @@ export const creatSettings = (form) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.post(url + "/users/login/", form, config);
+    const { data } = await axios.post(url + "/settings/", form, config);
     dispatch({
       type: ADD_SETTINGS_SUCCESS,
       payload: data,

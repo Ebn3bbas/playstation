@@ -48,8 +48,8 @@ const StoreForm = ({ isNew }) => {
                     className={style.input}
                     placeholder="Enter name"
                     type="text"
-                    name="name"
-                    value={element.name || ""}
+                    name="title"
+                    value={element.title || ""}
                     onChange={(e) => handleChange(index, e)}
                   />
                 </td>
@@ -59,8 +59,8 @@ const StoreForm = ({ isNew }) => {
                     className={style.input}
                     placeholder="Enter price"
                     type="number"
-                    name="email"
-                    value={element.email || ""}
+                    name="price"
+                    value={element.price || ""}
                     onChange={(e) => handleChange(index, e)}
                   />
                 </td>

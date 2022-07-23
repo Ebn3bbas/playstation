@@ -8,7 +8,6 @@ import SessionsDetails from "../pages/Sessions/SessionsDetails/SessionsDetails";
 import SessionsForm from "../pages/Sessions/SessionsForm/SessionsForm";
 import Settings from "../pages/Settings/Settings";
 import Store from "../pages/Store/Store";
-import StoreDetails from "../pages/Store/StoreDetails/StoreDetails";
 import StoreForm from "../pages/Store/StoreForm/StoreForm";
 import Users from "../pages/Users/Users";
 import UsersDetails from "../pages/Users/UsersDetails/UsersDetails";
@@ -87,10 +86,6 @@ const routes = [
   {
     path: "/store-update-form",
     element: <StoreForm isNew={false} />,
-  },
-  {
-    path: "/store-details/:id",
-    element: <StoreDetails />,
   },
   {
     path: "/settings",

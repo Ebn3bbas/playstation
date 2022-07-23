@@ -17,7 +17,9 @@ import styles from "./DevicesForm.module.css";
 const initialState = {
   title: undefined,
   type: undefined,
-  price: undefined,
+  single_hour: undefined,
+  match_hour: undefined,
+  multi_hour: undefined,
 };
 const DevicesForm = ({ isNew }) => {
   const dispatch = useDispatch();
@@ -83,7 +85,9 @@ const DevicesForm = ({ isNew }) => {
             name="type"
             options={["PlayStation 4", "PlayStation 5"]}
           />
-          <Input label="Price" name="price" type="number" />
+          <Input label="Single hour price" name="single_hour" type="number" />
+          <Input label="Multi hour price" name="multi_hour" type="number" />
+          <Input label="Match price" name="match_hour" type="number" />
         </Form>
       </div>
     </>
