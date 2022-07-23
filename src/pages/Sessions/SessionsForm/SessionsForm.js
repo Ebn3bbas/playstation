@@ -1,26 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import { addRoom, updateRoom } from '../../../actions/sessions';
+import { getAllDevices } from '../../../actions/device';
+import { addSession, updateSession } from '../../../actions/sessions';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 import Form from '../../../components/Form/Form';
 import Input from '../../../components/Form/Input/Input';
 import Select from '../../../components/Form/Select/Select';
 import Success from '../../../components/Success/Success';
-import { ADD_SESSION_RESET, UPDATE_SESSION_RESET } from '../../../constants/sessions';
+import {
+    ADD_SESSION_RESET,
+    UPDATE_SESSION_RESET,
+} from '../../../constants/sessions';
 import styles from './SessionsForm.module.css';
 
 const initialState = {
-    room_name: undefined,
-    announcement: undefined,
-    room_BG: undefined,
-    room_avatar: undefined,
-    room_admins: undefined,
-    room_members: undefined,
-    room_generas: undefined,
-    private: undefined,
-    room_password: undefined,
+    hours: undefined,
+    type: undefined,
+    device: undefined,
 };
 
 const SessionsForm = ({ isNew }) => {
@@ -30,34 +28,46 @@ const SessionsForm = ({ isNew }) => {
 
     const submitHandler = (e, form) => {
         e.preventDefault();
+        const newForm = {
+            ...form,
+            device: devices.rows.find((d) => d.title === form.device),
+        };
         if (isNew) {
-            dispatch(addRoom(form));
+            dispatch(addSession(newForm));
         } else {
-            dispatch(updateRoom(params.id, form));
+            dispatch(updateSession(params.id, newForm));
         }
-        
     };
 
-    const { room, loading, success, error } = useSelector((state) => {
+    const { session, loading, success, error } = useSelector((state) => {
         if (isNew) {
-            return state.addRoom;
+            return state.addSession;
         } else {
-            return state.updateRoom;
+            return state.updateSession;
         }
     });
+
+    const { devices } = useSelector((state) => state.allDevices);
+
+    console.log(devices);
 
     useEffect(() => {
         if (success) {
             setTimeout(() => {
-                dispatch({ type: isNew ? ADD_SESSION_RESET : UPDATE_SESSION_RESET });
+                dispatch({
+                    type: isNew ? ADD_SESSION_RESET : UPDATE_SESSION_RESET,
+                });
                 navigate('/sessions');
             }, 600);
         }
     }, [success, navigate, dispatch, isNew]);
 
+    useEffect(() => {
+        dispatch(getAllDevices(1, 10));
+    }, [dispatch]);
+
     return (
         <>
-    
             <div className={styles.back}>
                 <BackButton />
             </div>
@@ -71,36 +81,35 @@ const SessionsForm = ({ isNew }) => {
                 {success && (
                     <Success>
                         {isNew
-                            ? 'Room created successfully'
-                            : 'Room updated successfully'}
+                            ? 'Session created successfully'
+                            : 'Session updated successfully'}
                     </Success>
                 )}
                 <Form
-                initialState={initialState}
-                submitHandler={submitHandler}
-                isNew={isNew}
-                formName='Session'
-                button={"Start"}
+                    initialState={initialState}
+                    submitHandler={submitHandler}
+                    isNew={isNew}
+                    formName='Session'
+                    button={'Start'}
                 >
                     {isNew && (
-                    <>
-                    <Input label='Name' name='room_name' />
-                    <Input label='Hours' name='hours' />
-                    </>       )}
+                        <>
+                            <Input label='Hours' name='hours' />
+                        </>
+                    )}
                     <Select
                         label='Device'
                         name='device'
-                        options={[]}//not active Devices
+                        options={devices?.rows?.map((r) => r.title) || []} //not active Devices
                         mult={false}
                     />
                     <Select
                         label='Type'
                         name='type'
-                        options={["Single", "Multi"]}
+                        options={['Single', 'Multi']}
                         mult={false}
                     />
-                    
-                    
+
                     {!isNew && (
                         <>
                             <Input label='Added Hours' name='added_hours' />
@@ -108,10 +117,9 @@ const SessionsForm = ({ isNew }) => {
                             <Select
                                 label='Drinks'
                                 name='drinks'
-                                options={[]}//All drinks
+                                options={[]} //All drinks
                                 mult={true}
                             />
-                            
                         </>
                     )}
                 </Form>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { deleteRoom, getAllRooms } from '../../actions/sessions';
+import { deleteSession, getAllSessions } from '../../actions/sessions';
 import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import EditButton from '../../components/Buttons/EditButton/EditButton';
 import Table from '../../components/Table/Table';
@@ -26,85 +26,49 @@ const Sessions = () => {
     };
 
     const deleteHandler = (roomId) => {
-        dispatch(deleteRoom(roomId));
+        dispatch(deleteSession(roomId));
     };
 
-    const { rooms, loading, error } = useSelector((state) => state.allRooms);
+    const { sessions, loading, error } = useSelector(
+        (state) => state.allSessions
+    );
     const {
-        room: deletedRoom,
+        session: deletedSession,
         loading: deleteLoading,
         success: deleteSuccess,
         error: deleteError,
-    } = useSelector((state) => state.deleteRoom);
+    } = useSelector((state) => state.deleteSession);
 
     // const onTimerUpdate = ({ time, duration }) => {
     //     setTime(time);
     //     setDuration(duration);
     // };
-
     useEffect(() => {
-        dispatch(getAllRooms(currentPage, limit));
+        dispatch(getAllSessions(currentPage, limit));
     }, [dispatch, currentPage, limit, deleteLoading]);
-    const columns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete', 'time'];
-    const Endedcolumns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete'];
-    const data = [
-        {
-            _id: 1,
-            ID: '1',
-            Name: 'ahmed shabsn',
-            Owner: 'samy adel',
-            Type: 'ps4',
-            edit: 'edit',
-            delete: 'delete',
-            // time: (
-            //     <Timer active duration={null}>
-            //         <Timecode />
-            //     </Timer>
-            // ),
-        },
-        {
-            _id: 1,
-            ID: '1',
-            Name: 'ahmed shabsn',
-            Owner: 'samy adel',
-            Type: 'ps4',
-            edit: 'edit',
-            delete: 'delete',
-            time: (
-                <div>
-                    {/* <Timer
-                        active
-                        duration={45 * 60 * 1000}
-                        onTimeUpdate={onTimerUpdate}
-                    />
-                    <Timecode time={duration - time} /> */}
-                </div>
-            ),
-        },
-    ];
 
-    if (rooms && rooms?.rooms?.length !== 0) {
-        for (let r in rooms.rooms) {
+    const columns = ['Id', 'PS', 'Type', 'edit', 'delete', 'time'];
+    const Endedcolumns = ['Id', 'PS', 'Type', 'edit', 'delete'];
+    const data = [];
+
+    if (sessions && sessions?.rows?.length !== 0) {
+        for (let r in sessions.rows) {
             data.push({
-                _id: rooms?.rooms[r]?._id,
-                ID: rooms?.rooms[r]?.room_id || 'no data',
-                Name: rooms?.rooms[r]?.room_name || 'no data',
-                Owner:
-                    rooms?.rooms[r]?.room_owner?.first_name +
-                        ' ' +
-                        rooms?.rooms[r]?.room_owner?.last_name || 'no data',
-                Private: rooms?.rooms[r]?.private?.toString() || 'no data',
+                _id: sessions?.rows[r]?.id,
+                ID: sessions?.rows[r]?.id || 'no data',
+                PS: sessions?.rows[r]?.ps || 'no data',
+                type: sessions?.rows[r]?.type || 'no data',
                 edit: (
                     <EditButton
                         updateHandler={() =>
-                            updateHandler(rooms?.rooms[r]?._id)
+                            updateHandler(sessions?.rows[r]?.id)
                         }
                     />
                 ),
                 delete: (
                     <DeleteButton
                         deleteHandler={() =>
-                            deleteHandler(rooms?.rooms[r]?._id)
+                            deleteHandler(sessions?.rows[r]?.id)
                         }
                     />
                 ),
@@ -112,7 +76,7 @@ const Sessions = () => {
         }
     }
 
-    console.log(data);
+    console.log(sessions);
 
     const pageChangeHandler = (e, page) => {
         e.preventDefault();
@@ -142,7 +106,7 @@ const Sessions = () => {
                             addNewButton={true}
                             pageChangeHandler={pageChangeHandler}
                             currentPage={currentPage}
-                            dataCount={rooms?.roomsCount}
+                            dataCount={sessions?.count}
                             limit={limit}
                         />
                         <Table
@@ -153,7 +117,7 @@ const Sessions = () => {
                             addNewButton={false}
                             pageChangeHandler={pageChangeHandler}
                             currentPage={currentPage}
-                            dataCount={rooms?.roomsCount}
+                            dataCount={sessions?.count}
                             limit={limit}
                         />
                     </div>

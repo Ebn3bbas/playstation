@@ -5,7 +5,7 @@ import List from '../../../components/List/List';
 import Image from '../../../components/Image/Image';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getRoom } from '../../../actions/sessions';
+import { getSession } from '../../../actions/sessions';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 
@@ -16,7 +16,7 @@ const RoomsDetails = () => {
     const { room, error, loading } = useSelector((state) => state.getRoom);
 
     useEffect(() => {
-        dispatch(getRoom(params.id));
+        dispatch(getSession(params.id));
     }, [dispatch, params]);
     const data = [
         { name: 'Room ID', value: room?.room_id },

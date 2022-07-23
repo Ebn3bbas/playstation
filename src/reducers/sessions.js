@@ -21,76 +21,76 @@ import {
     UPDATE_SESSION_SUCCESS,
 } from '../constants/sessions';
 
-export const getAllRoomsReducer = (state = { rooms: null }, action) => {
+export const getAllSessionsReducer = (state = { sessions: null }, action) => {
     switch (action.type) {
         case GET_ALL_SESSIONS_REQUEST:
             return { loading: true };
         case GET_ALL_SESSIONS_SUCCESS:
-            return { loading: false, rooms: action.payload };
+            return { loading: false, sessions: action.payload };
         case GET_ALL_SESSIONS_FAIL:
             return { loading: false, error: action.payload };
         case GET_ALL_SESSIONS_RESET:
-            return { rooms: null };
+            return { sessions: null };
         default:
             return state;
     }
 };
 
-export const getRoomReducer = (state = { room: null }, action) => {
+export const getSessionReducer = (state = { session: null }, action) => {
     switch (action.type) {
         case GET_SESSION_REQUEST:
             return { loading: true };
         case GET_SESSION_SUCCESS:
-            return { loading: false, room: action.payload };
+            return { loading: false, session: action.payload };
         case GET_SESSION_FAIL:
             return { loading: false, error: action.payload };
         case GET_SESSION_RESET:
-            return { room: null };
+            return { session: null };
         default:
             return state;
     }
 };
 
-export const addRoomReducer = (state = { room: null }, action) => {
+export const addSessionReducer = (state = { session: null }, action) => {
     switch (action.type) {
         case ADD_SESSION_REQUEST:
             return { loading: true };
         case ADD_SESSION_SUCCESS:
-            return { loading: false, success: true, room: action.payload };
+            return { loading: false, success: true, session: action.payload };
         case ADD_SESSION_FAIL:
             return { loading: false, error: action.payload };
         case ADD_SESSION_RESET:
-            return { room: null };
+            return { session: null };
         default:
             return state;
     }
 };
 
-export const updateRoomReducer = (state = { room: null }, action) => {
+export const updateSessionReducer = (state = { session: null }, action) => {
     switch (action.type) {
         case UPDATE_SESSION_REQUEST:
             return { loading: true };
         case UPDATE_SESSION_SUCCESS:
-            return { loading: false, success: true, room: action.payload };
+            return { loading: false, success: true, session: action.payload };
         case UPDATE_SESSION_FAIL:
             return { loading: false, error: action.payload };
         case UPDATE_SESSION_RESET:
-            return { room: null };
+            return { session: null };
         default:
             return state;
     }
 };
 
-export const deleteRoomReducer = (state = { room: null }, action) => {
+export const deleteSessionReducer = (state = { session: null }, action) => {
     switch (action.type) {
         case DELETE_SESSION_REQUEST:
             return { loading: true };
         case DELETE_SESSION_SUCCESS:
-            return { loading: false, success: true, room: action.payload };
+            return { loading: false, success: true, session: action.payload };
         case DELETE_SESSION_FAIL:
             return { loading: false, error: action.payload };
         case DELETE_SESSION_RESET:
-            return { room: null };
+            return { session: null };
         default:
             return state;
     }
