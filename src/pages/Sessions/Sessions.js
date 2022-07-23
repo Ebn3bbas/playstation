@@ -8,10 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './Sessions.module.css';
 import Error from '../../components/Error/Error';
 import Success from '../../components/Success/Success';
+import Timer from 'react-timer-wrapper';
+import Timecode from 'react-timecode';
 
 const Sessions = () => {
     let limit = 10;
     const [currentPage, setCurrentPage] = useState(1);
+    const [count, setCount] = useState(0);
+    const [time, setTime] = useState(0);
+    const [duration, setDuration] = useState(45 * 60 * 1000);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -31,15 +36,52 @@ const Sessions = () => {
         success: deleteSuccess,
         error: deleteError,
     } = useSelector((state) => state.deleteRoom);
-    
+
+    // const onTimerUpdate = ({ time, duration }) => {
+    //     setTime(time);
+    //     setDuration(duration);
+    // };
+
     useEffect(() => {
         dispatch(getAllRooms(currentPage, limit));
     }, [dispatch, currentPage, limit, deleteLoading]);
-    const columns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete' , 'time'];
+    const columns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete', 'time'];
     const Endedcolumns = ['Id', 'Name', 'Owner', 'Type', 'edit', 'delete'];
-    const data = [];
-
-    
+    const data = [
+        {
+            _id: 1,
+            ID: '1',
+            Name: 'ahmed shabsn',
+            Owner: 'samy adel',
+            Type: 'ps4',
+            edit: 'edit',
+            delete: 'delete',
+            // time: (
+            //     <Timer active duration={null}>
+            //         <Timecode />
+            //     </Timer>
+            // ),
+        },
+        {
+            _id: 1,
+            ID: '1',
+            Name: 'ahmed shabsn',
+            Owner: 'samy adel',
+            Type: 'ps4',
+            edit: 'edit',
+            delete: 'delete',
+            time: (
+                <div>
+                    {/* <Timer
+                        active
+                        duration={45 * 60 * 1000}
+                        onTimeUpdate={onTimerUpdate}
+                    />
+                    <Timecode time={duration - time} /> */}
+                </div>
+            ),
+        },
+    ];
 
     if (rooms && rooms?.rooms?.length !== 0) {
         for (let r in rooms.rooms) {
@@ -91,30 +133,30 @@ const Sessions = () => {
                 {loading ? (
                     <p>loading...</p>
                 ) : (
-                <div>
-                    <Table
-                        data={data}
-                        columns={columns}
-                        tableName='Sessions'
-                        showDetails={true}
-                        addNewButton={true}
-                        pageChangeHandler={pageChangeHandler}
-                        currentPage={currentPage}
-                        dataCount={rooms?.roomsCount}
-                        limit={limit}
-                    />
-                    <Table
-                        data={data}
-                        columns={Endedcolumns}
-                        tableName='Ended Sessions'
-                        showDetails={true}
-                        addNewButton={false}
-                        pageChangeHandler={pageChangeHandler}
-                        currentPage={currentPage}
-                        dataCount={rooms?.roomsCount}
-                        limit={limit}
-                    />    
-                </div>
+                    <div>
+                        <Table
+                            data={data}
+                            columns={columns}
+                            tableName='Sessions'
+                            showDetails={true}
+                            addNewButton={true}
+                            pageChangeHandler={pageChangeHandler}
+                            currentPage={currentPage}
+                            dataCount={rooms?.roomsCount}
+                            limit={limit}
+                        />
+                        <Table
+                            data={data}
+                            columns={Endedcolumns}
+                            tableName='Ended Sessions'
+                            showDetails={true}
+                            addNewButton={false}
+                            pageChangeHandler={pageChangeHandler}
+                            currentPage={currentPage}
+                            dataCount={rooms?.roomsCount}
+                            limit={limit}
+                        />
+                    </div>
                 )}
             </div>
         </div>

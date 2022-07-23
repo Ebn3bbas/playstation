@@ -7,7 +7,7 @@ import Navbar from '../layout/Navbar/Navbar';
 import styles from './Main.module.css';
 import routes from './routes';
 
-const Main = ({ showSidebar, setShowSidebar }) => {
+const Main = ({ showSidebar, setShowSidebar, userInfo }) => {
     return (
         <>
             <div
@@ -22,14 +22,29 @@ const Main = ({ showSidebar, setShowSidebar }) => {
                 />
                 <div className={styles.main}>
                     <Routes>
-                        {routes.map((route, idx) => (
-                            <Route
-                                key={idx}
-                                path={route.path}
-                                element={route.element}
-                                exact={route.exact || false}
-                            />
-                        ))}
+                        {routes.map((route, idx) => {
+                            if (userInfo) {
+                                return (
+                                    <Route
+                                        key={idx}
+                                        path={route.path}
+                                        element={route.element}
+                                        exact={route.exact || false}
+                                    />
+                                );
+                            } else {
+                                if (route.path === '/login' || '/register') {
+                                    return (
+                                        <Route
+                                            key={idx}
+                                            path={route.path}
+                                            element={route.element}
+                                            exact={route.exact || false}
+                                        />
+                                    );
+                                }
+                            }
+                        })}
                     </Routes>
                 </div>
                 <Footer />
