@@ -1,13 +1,12 @@
 import React from "react";
 import Form from "../../components/Form/Form";
-import Image from "../../components/Image/Image";
 import styles from "./Profile.module.css";
-import profilePic from "../../utils/images/profilePic.jpg";
 import Input from "../../components/Form/Input/Input";
 import Error from "../../components/Error/Error";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../../actions/users";
 import Success from "../../components/Success/Success";
+import { useState } from "react";
 
 const Profile = ({ isNew }) => {
   const userI = JSON.parse(localStorage.getItem("userInfo"));
@@ -18,13 +17,13 @@ const Profile = ({ isNew }) => {
     email: userI?.email,
   };
   const dispatch = useDispatch();
-  console.log(userI);
+
   const { userInfo } = useSelector((state) => state.login);
   const submitHandler = (e, form) => {
     e.preventDefault();
     dispatch(updateUserProfile(userInfo?.id, form));
   };
-
+  console.log(userI);
   const { user, loading, success, error } = useSelector(
     (state) => state.updateUser
   );

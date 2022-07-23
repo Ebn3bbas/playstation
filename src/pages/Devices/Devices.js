@@ -35,24 +35,39 @@ const Devices = () => {
     dispatch(getAllDevices(7, 7));
   }, [dispatch, currentPage, limit]);
 
-  const columns = ["ID", "Name", "Type", "Price", "isActive", "Edit", "Delete"];
-  console.log(devices);
+  const columns = [
+    "ID",
+    "Name",
+    "Type",
+    "Single",
+    "Multi",
+    "Match",
+    "isActive",
+    "Edit",
+    "Delete",
+  ];
   const data = [];
 
-  for (let u in devices) {
-    if (devices?.length !== 0) {
+  for (let u in devices?.rows) {
+    if (devices.rows.length !== 0) {
       data.push({
-        id: devices[u]?.id,
-        ID: devices[u]?.id || "no data",
-        Name: devices[u]?.title || "no data",
-        Type: devices[u]?.type || "no data",
-        Price: devices[u]?.price || "no data",
-        isActive: devices[u]?.isActive?.toString() || "no data",
+        id: devices?.rows[u].id,
+        ID: devices?.rows[u].id || "no data",
+        Name: devices?.rows[u].title || "no data",
+        Type: devices?.rows[u].type || "no data",
+        Single: devices?.rows[u].single_hour || "no data",
+        Multi: devices?.rows[u].multi_hour || "no data",
+        Match: devices?.rows[u].match_hour || "no data",
+        isActive: devices?.rows[u].isActive?.toString() || "no data",
         Edit: (
-          <EditButton updateHandler={() => updateHandler(devices[u]?.id)} />
+          <EditButton
+            updateHandler={() => updateHandler(devices?.rows[u].id)}
+          />
         ),
         Delete: (
-          <DeleteButton deleteHandler={() => deleteHandler(devices[u]?.id)} />
+          <DeleteButton
+            deleteHandler={() => deleteHandler(devices?.rows[u].id)}
+          />
         ),
       });
     }

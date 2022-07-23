@@ -256,11 +256,11 @@ export const updateUserProfile = (id, body) => async (dispatch, getState) => {
       body,
       config
     );
-
+    localStorage.setItem("userInfo", JSON.stringify(data.data));
     if (data) {
       dispatch({
         type: UPDATE_USER_SUCCESS,
-        payload: data.user,
+        payload: data,
       });
       dispatch({
         type: GET_ALL_USERS_RESET,
