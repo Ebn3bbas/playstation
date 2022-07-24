@@ -20,38 +20,52 @@ import {
 import axios from 'axios';
 
 import env from '../env.json';
-export const getAllDevices = (page, limit) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: GET_ALL_DEVICES_REQUEST,
-        });
+export const getAllDevices =
+    (page, limit, is_active) => async (dispatch, getState) => {
+        try {
+            dispatch({
+                type: GET_ALL_DEVICES_REQUEST,
+            });
 
-        const {
-            login: { userInfo },
-        } = getState();
+            const {
+                login: { userInfo },
+            } = getState();
 
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${userInfo.token}`,
-            },
-        };
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`,
+                },
+            };
 
-        const { data } = await axios.get(
-            env.BASE_HOST + `/stores/devices/?page=${page}&limit=${limit}`,
-            config
-        );
-        dispatch({
-            type: GET_ALL_DEVICES_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: GET_ALL_DEVICES_FAIL,
-            payload: 'failed',
-        });
-    }
-};
+            if (page && limit) {
+                const { data } = await axios.get(
+                    env.BASE_HOST +
+                        `/stores/devices?page=${page}&limit=${limit}`,
+                    config
+                );
+                dispatch({
+                    type: GET_ALL_DEVICES_SUCCESS,
+                    payload: data,
+                });
+            } else {
+                const { data } = await axios.get(
+                    env.BASE_HOST + `/stores/devices?is_active=${is_active}`,
+                    config
+                );
+                dispatch({
+                    type: GET_ALL_DEVICES_SUCCESS,
+                    payload: data,
+                });
+            }
+        } catch (error) {
+            dispatch({
+                type: GET_ALL_DEVICES_FAIL,
+                payload:
+                    error.response.data.error || error.response.data.errors,
+            });
+        }
+    };
 
 export const getDevice = (id) => async (dispatch, getState) => {
     try {
