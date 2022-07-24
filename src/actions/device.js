@@ -50,7 +50,7 @@ export const getAllDevices =
                 });
             } else {
                 const { data } = await axios.get(
-                    env.BASE_HOST + `/stores/devices?is_active=${is_active}`,
+                    env.BASE_HOST + `/stores/devices/?is_active=${is_active}`,
                     config
                 );
                 dispatch({

@@ -109,7 +109,7 @@ const SessionsForm = ({ isNew }) => {
                         <Select
                             label='Device'
                             name='device'
-                            options={devices?.rows?.map((r) => r.title) || []} //not active Devices
+                            options={devices?.map((r) => r.title) || []} //not active Devices
                             mult={false}
                         />
                     )}
