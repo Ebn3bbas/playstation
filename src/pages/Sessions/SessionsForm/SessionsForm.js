@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { getAllDevices } from '../../../actions/device';
-import { addSession, updateSession } from '../../../actions/sessions';
+import {
+    addSession,
+    getSession,
+    updateSession,
+} from '../../../actions/sessions';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import Error from '../../../components/Error/Error';
 import Form from '../../../components/Form/Form';
@@ -30,14 +34,21 @@ const SessionsForm = ({ isNew }) => {
         e.preventDefault();
         const newForm = {
             ...form,
-            device: devices.rows.find((d) => d.title === form.device),
+            device: devices?.find((d) => d.title === form.device),
         };
         if (isNew) {
             dispatch(addSession(newForm));
         } else {
-            dispatch(updateSession(params.id, newForm));
+            console.log(newForm);
+            dispatch(
+                updateSession(params.id, sessionDetails.playstation.id, newForm)
+            );
         }
     };
+
+    const { session: sessionDetails } = useSelector(
+        (state) => state.getSession
+    );
 
     const { session, loading, success, error } = useSelector((state) => {
         if (isNew) {
@@ -48,8 +59,6 @@ const SessionsForm = ({ isNew }) => {
     });
 
     const { devices } = useSelector((state) => state.allDevices);
-
-    console.log(devices);
 
     useEffect(() => {
         if (success) {
@@ -63,7 +72,11 @@ const SessionsForm = ({ isNew }) => {
     }, [success, navigate, dispatch, isNew]);
 
     useEffect(() => {
-        dispatch(getAllDevices(1, 10));
+        dispatch(getSession(params.id));
+    }, [dispatch, params]);
+
+    useEffect(() => {
+        dispatch(getAllDevices(null, null, 'True'));
     }, [dispatch]);
 
     return (
@@ -90,38 +103,22 @@ const SessionsForm = ({ isNew }) => {
                     submitHandler={submitHandler}
                     isNew={isNew}
                     formName='Session'
-                    button={'Start'}
+                    button={isNew ? 'Start' : 'Update'}
                 >
                     {isNew && (
-                        <>
-                            <Input label='Hours' name='hours' />
-                        </>
+                        <Select
+                            label='Device'
+                            name='device'
+                            options={devices?.rows?.map((r) => r.title) || []} //not active Devices
+                            mult={false}
+                        />
                     )}
-                    <Select
-                        label='Device'
-                        name='device'
-                        options={devices?.rows?.map((r) => r.title) || []} //not active Devices
-                        mult={false}
-                    />
                     <Select
                         label='Type'
                         name='type'
-                        options={['Single', 'Multi']}
+                        options={['Single', 'Multi', 'Match']}
                         mult={false}
                     />
-
-                    {!isNew && (
-                        <>
-                            <Input label='Added Hours' name='added_hours' />
-
-                            <Select
-                                label='Drinks'
-                                name='drinks'
-                                options={[]} //All drinks
-                                mult={true}
-                            />
-                        </>
-                    )}
                 </Form>
             </div>
         </>

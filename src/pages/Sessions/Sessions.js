@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { deleteSession, getAllSessions } from '../../actions/sessions';
+import {
+    deleteSession,
+    getAllEndedSessions,
+    getAllNotEndedSessions,
+    getAllSessions,
+} from '../../actions/sessions';
 import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import EditButton from '../../components/Buttons/EditButton/EditButton';
 import Table from '../../components/Table/Table';
@@ -10,28 +15,34 @@ import Error from '../../components/Error/Error';
 import Success from '../../components/Success/Success';
 import Timer from 'react-timer-wrapper';
 import Timecode from 'react-timecode';
+import { useTimer } from 'use-timer';
+import PrimaryButton from '../../components/Buttons/PrimaryButton/PrimaryButton';
 
 const Sessions = () => {
     let limit = 10;
     const [currentPage, setCurrentPage] = useState(1);
-    const [count, setCount] = useState(0);
-    const [time, setTime] = useState(0);
-    const [duration, setDuration] = useState(45 * 60 * 1000);
+    const [currentEndedPage, setCurrentEndedPage] = useState(1);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const updateHandler = (roomId) => {
-        navigate(`/sessions-update-form/${roomId}`);
+    const updateHandler = (sessionId) => {
+        navigate(`/sessions-update-form/${sessionId}`);
     };
 
-    const deleteHandler = (roomId) => {
-        dispatch(deleteSession(roomId));
+    const deleteHandler = (sessionId) => {
+        dispatch(deleteSession(sessionId));
     };
 
-    const { sessions, loading, error } = useSelector(
-        (state) => state.allSessions
+    const { endedSessions, loading, error } = useSelector(
+        (state) => state.allEndedSessions
     );
+
+    const {
+        notEndedSessions,
+        loading: notEndedLoading,
+        error: notEndeddError,
+    } = useSelector((state) => state.allNotEndedSessions);
     const {
         session: deletedSession,
         loading: deleteLoading,
@@ -39,36 +50,56 @@ const Sessions = () => {
         error: deleteError,
     } = useSelector((state) => state.deleteSession);
 
-    // const onTimerUpdate = ({ time, duration }) => {
-    //     setTime(time);
-    //     setDuration(duration);
-    // };
     useEffect(() => {
-        dispatch(getAllSessions(currentPage, limit));
-    }, [dispatch, currentPage, limit, deleteLoading]);
+        dispatch(getAllEndedSessions(currentEndedPage, limit));
+        dispatch(getAllNotEndedSessions(currentPage, limit));
+    }, [dispatch, currentPage, limit, deleteLoading, currentEndedPage]);
 
-    const columns = ['Id', 'PS', 'Type', 'edit', 'delete', 'time'];
-    const Endedcolumns = ['Id', 'PS', 'Type', 'edit', 'delete'];
+    const columns = [
+        'Id',
+        'PS',
+        'Type',
+        'Started At',
+        'add_orders',
+        'edit',
+        'delete',
+    ];
+    const Endedcolumns = [
+        'Id',
+        'PS',
+        'Type',
+        'Started At',
+        'Ended At',
+        'edit',
+        'delete',
+    ];
     const data = [];
+    const endedData = [];
 
-    if (sessions && sessions?.rows?.length !== 0) {
-        for (let r in sessions.rows) {
-            data.push({
-                _id: sessions?.rows[r]?.id,
-                ID: sessions?.rows[r]?.id || 'no data',
-                PS: sessions?.rows[r]?.ps || 'no data',
-                type: sessions?.rows[r]?.type || 'no data',
+    if (endedSessions && endedSessions?.rows?.length !== 0) {
+        for (let r in endedSessions.rows) {
+            endedData.push({
+                id: endedSessions?.rows[r]?.id,
+                ID: endedSessions?.rows[r]?.id || 'no data',
+                PS: endedSessions?.rows[r]?.playstation?.title || 'no data',
+                type: endedSessions?.rows[r]?.type || 'no data',
+                started_at:
+                    endedSessions?.rows[r]?.started_at?.substr(11, 8) ||
+                    'no data',
+                ended_at:
+                    endedSessions?.rows[r]?.ended_at?.substr(11, 8) ||
+                    'not ended yet',
                 edit: (
                     <EditButton
                         updateHandler={() =>
-                            updateHandler(sessions?.rows[r]?.id)
+                            updateHandler(endedSessions?.rows[r]?.id)
                         }
                     />
                 ),
                 delete: (
                     <DeleteButton
                         deleteHandler={() =>
-                            deleteHandler(sessions?.rows[r]?.id)
+                            deleteHandler(endedSessions?.rows[r]?.id)
                         }
                     />
                 ),
@@ -76,11 +107,55 @@ const Sessions = () => {
         }
     }
 
-    console.log(sessions);
+    if (notEndedSessions && notEndedSessions?.rows?.length !== 0) {
+        for (let r in notEndedSessions.rows) {
+            data.push({
+                id: notEndedSessions?.rows[r]?.id,
+                ID: notEndedSessions?.rows[r]?.id || 'no data',
+                PS: notEndedSessions?.rows[r]?.playstation?.title || 'no data',
+                type: notEndedSessions?.rows[r]?.type || 'no data',
+                started_at:
+                    notEndedSessions?.rows[r]?.started_at?.substr(11, 8) ||
+                    'no data',
+
+                add_orders: (
+                    <PrimaryButton
+                        title='Add Orders'
+                        onClick={() =>
+                            navigate(
+                                `/sessions-add-orders/${notEndedSessions?.rows[r]?.id}`
+                            )
+                        }
+                    />
+                ),
+                edit: (
+                    <EditButton
+                        updateHandler={() =>
+                            updateHandler(notEndedSessions?.rows[r]?.id)
+                        }
+                    />
+                ),
+                delete: (
+                    <DeleteButton
+                        deleteHandler={() =>
+                            deleteHandler(notEndedSessions?.rows[r]?.id)
+                        }
+                    />
+                ),
+            });
+        }
+    }
+
+    console.log(endedSessions);
 
     const pageChangeHandler = (e, page) => {
         e.preventDefault();
         setCurrentPage(page);
+    };
+
+    const endedPageChangeHandler = (e, page) => {
+        e.preventDefault();
+        setCurrentEndedPage(page);
     };
 
     return (
@@ -93,7 +168,9 @@ const Sessions = () => {
                         <Error>{error}</Error>
                     ))}
                 {deleteError && <Error>{deleteError}</Error>}
-                {deleteSuccess && <Success>Room deleted successfully</Success>}
+                {deleteSuccess && (
+                    <Success>Seesion deleted successfully</Success>
+                )}
                 {loading ? (
                     <p>loading...</p>
                 ) : (
@@ -106,18 +183,18 @@ const Sessions = () => {
                             addNewButton={true}
                             pageChangeHandler={pageChangeHandler}
                             currentPage={currentPage}
-                            dataCount={sessions?.count}
+                            dataCount={notEndedSessions?.count}
                             limit={limit}
                         />
                         <Table
-                            data={data}
+                            data={endedData}
                             columns={Endedcolumns}
-                            tableName='Ended Sessions'
+                            tableName='Sessions'
                             showDetails={true}
                             addNewButton={false}
-                            pageChangeHandler={pageChangeHandler}
-                            currentPage={currentPage}
-                            dataCount={sessions?.count}
+                            pageChangeHandler={endedPageChangeHandler}
+                            currentPage={currentEndedPage}
+                            dataCount={endedSessions?.count}
                             limit={limit}
                         />
                     </div>

@@ -12,8 +12,12 @@ import {
     updateUserReducer,
 } from './reducers/users';
 import {
+    addSessionOrderReducer,
     addSessionReducer,
     deleteSessionReducer,
+    endSessionReducer,
+    getAllEndedSessionsReducer,
+    getAllNotEndedSessionsReducer,
     getAllSessionsReducer,
     getSessionReducer,
     updateSessionReducer,
@@ -41,11 +45,15 @@ const reducer = combineReducers({
 
     //settings
     creatsettings: creatSettingsReducer,
-    //  rooms
+    //  sessions
     allSessions: getAllSessionsReducer,
+    allEndedSessions: getAllEndedSessionsReducer,
+    allNotEndedSessions: getAllNotEndedSessionsReducer,
     getSession: getSessionReducer,
     updateSession: updateSessionReducer,
     addSession: addSessionReducer,
+    endSession: endSessionReducer,
+    addSessionOrders: addSessionOrderReducer,
     deleteSession: deleteSessionReducer,
     // Devices
     allDevices: getAllDevicesReducer,

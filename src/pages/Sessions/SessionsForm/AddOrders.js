@@ -1,12 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+import { addOrders, getSession } from '../../../actions/sessions';
+import { getAllStores } from '../../../actions/store';
 import BackButton from '../../../components/Buttons/BackButton/BackButton';
 import formStyles from '../../../components/Form/Form.module.css';
 import style from '../../../components/Form/Input/Input.module.css';
-import styles from './StoreForm.module.css';
+import Success from '../../../components/Success/Success';
+import styles from './AddOrders.module.css';
 
-const StoreForm = ({ isNew }) => {
+const AddOrders = () => {
     const [formValues, setFormValues] = useState([{ name: '', price: '' }]);
+
+    const dispatch = useDispatch();
+    const params = useParams();
+    const navigate = useNavigate();
+
+    console.log(params);
+
+    const { stores } = useSelector((state) => state.allStores);
+    const { session } = useSelector((state) => state.getSession);
+
+    const {
+        session: addedOrders,
+        success,
+        error,
+    } = useSelector((state) => state.addSessionOrders);
+
+    useEffect(() => {
+        dispatch(getSession(params.id));
+        dispatch(getAllStores(null, null, 'True'));
+    }, [dispatch, params]);
+
+    useEffect(() => {
+        if (success) {
+            setTimeout(() => {
+                navigate('/sessions');
+            }, 600);
+        }
+    }, [success, navigate, dispatch]);
 
     let handleChange = (i, e) => {
         let newFormValues = [...formValues];
@@ -26,45 +59,54 @@ const StoreForm = ({ isNew }) => {
 
     let handleSubmit = (event) => {
         event.preventDefault();
-        console.log(JSON.stringify(formValues));
+        formValues.forEach((v) => {
+            const product = stores.find((s) => s.title === v.title);
+            dispatch(
+                addOrders({
+                    productId: product.id,
+                    sessionId: params.id,
+                })
+            );
+        });
     };
+
+    console.log(session);
 
     return (
         <>
             <div className={styles.back}>
                 <BackButton />
             </div>
-            <div className={styles.StoreFormContainer}>
+            <div className={styles.AddOrdersContainer}>
                 <form
                     className={formStyles.formContainer}
                     onSubmit={handleSubmit}
                 >
                     <table>
-                        <h2>
-                            {isNew ? 'Create' : isNew === null ? '' : 'Update'}
-                            {'Store'}
-                        </h2>
+                        <h2>Add Orders</h2>
+                        {success && (
+                            <Success>Orders added successfully</Success>
+                        )}
                         {formValues.map((element, index) => (
                             <tr key={index}>
                                 <td>
-                                    <input
-                                        className={style.input}
-                                        placeholder='Enter name'
-                                        type='text'
+                                    <label className={styles.lable}>
+                                        Enter name
+                                    </label>
+                                    <select
+                                        className={styles.select}
                                         name='title'
+                                        onChange={(e) => handleChange(index, e)}
                                         value={element.title || ''}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        className={style.input}
-                                        placeholder='Enter price'
-                                        type='number'
-                                        name='price'
-                                        value={element.price || ''}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
+                                    >
+                                        <option>--select order</option>
+                                        {stores?.length > 0 &&
+                                            stores?.map((o, idx) => (
+                                                <option
+                                                    key={idx}
+                                                >{`${o.title}`}</option>
+                                            ))}
+                                    </select>
                                 </td>
                                 {index ? (
                                     <td>
@@ -93,13 +135,13 @@ const StoreForm = ({ isNew }) => {
     );
 };
 
-export default StoreForm;
+export default AddOrders;
 //   return (
 //     <>
 //       <div className={styles.back}>
 //         <BackButton />
 //       </div>
-//       <div className={styles.StoreFormContainer}>
+//       <div className={styles.AddOrdersContainer}>
 //         {/* we need new form to handele these data */}
 //         <form className={formStyles.formContainer}>
 //           <table>
