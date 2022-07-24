@@ -47,7 +47,7 @@ const Devices = () => {
     "Delete",
   ];
   const data = [];
-
+  console.log(devices);
   for (let u in devices?.rows) {
     if (devices.rows.length !== 0) {
       data.push({

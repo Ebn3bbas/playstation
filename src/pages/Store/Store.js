@@ -31,7 +31,7 @@ const Store = () => {
   console.log(stores);
 
   useEffect(() => {
-    dispatch(getAllStores(7, 7));
+    dispatch(getAllStores(currentPage, limit));
   }, [dispatch, currentPage, limit, deletedStore]);
 
   const columns = ["Name", "Price", "edit", "delete"];

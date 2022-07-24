@@ -37,7 +37,10 @@ export const getAllStores = (page, limit) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(url + `/products/`, config);
+    const { data } = await axios.get(
+      url + `/products/?page=${page}&limit=${limit}`,
+      config
+    );
     dispatch({
       type: GET_ALL_STORES_SUCCESS,
       payload: data,
@@ -75,7 +78,7 @@ export const getStore = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_STORE_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -115,7 +118,7 @@ export const addStore = (body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_STORE_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -166,7 +169,7 @@ export const updateStore = (id, body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: UPDATE_STORE_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -213,7 +216,7 @@ export const deleteStore = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: DELETE_STORE_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };

@@ -47,7 +47,10 @@ export const getAllUsers = (page, limit) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(url + `/users/storeusers/`, config);
+    const { data } = await axios.get(
+      url + `/users/storeusers/?page=${page}/limit=${limit}`,
+      config
+    );
     dispatch({
       type: GET_ALL_USERS_SUCCESS,
       payload: data,
@@ -55,7 +58,7 @@ export const getAllUsers = (page, limit) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_ALL_USERS_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -85,7 +88,7 @@ export const getUser = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: GET_USER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -110,7 +113,7 @@ export const login = (form) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -138,15 +141,13 @@ export const register = (form) => async (dispatch) => {
       payload: data,
     });
 
-    const user = JSON.stringify(data);
+    const user = JSON.stringify(data.data);
 
-    localStorage.setItem("userInfo", {
-      token: user.token,
-    });
+    localStorage.setItem("userInfo", user);
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -173,7 +174,7 @@ export const logout = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: LOGOUT_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -224,7 +225,7 @@ export const addUser = (body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_USER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -274,7 +275,7 @@ export const updateUserProfile = (id, body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: UPDATE_USER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -324,7 +325,7 @@ export const updateUser = (id, body) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: UPDATE_USER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
@@ -371,7 +372,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
