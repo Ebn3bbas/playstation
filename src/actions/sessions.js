@@ -380,21 +380,21 @@ export const deleteSession = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.delete(
-            env.BASE_HOST + `/rooms/${id}`,
+            env.BASE_HOST + `/stores/sessions/delete/${id}/`,
             config
         );
 
         if (data.success) {
             dispatch({
                 type: DELETE_SESSION_SUCCESS,
-                payload: data.rooms,
+                payload: data,
             });
             setTimeout(() => {
                 dispatch({ type: DELETE_SESSION_RESET });
                 dispatch({
-                    type: DELETE_SESSION_REQUEST,
+                    type: GET_ALL_SESSIONS_RESET,
                 });
-            });
+            }, 600);
         } else {
             dispatch({
                 type: DELETE_SESSION_FAIL,
