@@ -63,7 +63,7 @@ export const getAllSessions = (page, limit) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: GET_ALL_SESSIONS_FAIL,
-            payload: error.response.data.error || error.response.data.errors,
+            payload: 'failed',
         });
     }
 };
@@ -215,7 +215,7 @@ export const addSession = (body) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ADD_SESSION_FAIL,
-            payload: error.response.data.error || error.response.data.errors,
+            payload: 'failed',
         });
     }
 };
@@ -263,8 +263,8 @@ export const endSession = (body) => async (dispatch, getState) => {
         }
     } catch (error) {
         dispatch({
-            type: END_SESSION_FAIL,
-            payload: error.response.data.error || error.response.data.errors,
+            type: UPDATE_SESSION_FAIL,
+            payload: 'failed',
         });
     }
 };
@@ -380,21 +380,21 @@ export const deleteSession = (id) => async (dispatch, getState) => {
         };
 
         const { data } = await axios.delete(
-            env.BASE_HOST + `/stores/sessions/delete/${id}/`,
+            env.BASE_HOST + `/rooms/${id}`,
             config
         );
 
         if (data.success) {
             dispatch({
                 type: DELETE_SESSION_SUCCESS,
-                payload: data,
+                payload: data.rooms,
             });
             setTimeout(() => {
                 dispatch({ type: DELETE_SESSION_RESET });
                 dispatch({
-                    type: GET_ALL_SESSIONS_RESET,
+                    type: DELETE_SESSION_REQUEST,
                 });
-            }, 600);
+            });
         } else {
             dispatch({
                 type: DELETE_SESSION_FAIL,
@@ -404,7 +404,7 @@ export const deleteSession = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: DELETE_SESSION_FAIL,
-            payload: error.response.data.error || error.response.data.errors,
+            payload: 'failed',
         });
     }
 };

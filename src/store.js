@@ -22,7 +22,14 @@ import {
     getSessionReducer,
     updateSessionReducer,
 } from './reducers/sessions';
-import { getAllStoreReducer } from './reducers/store';
+
+import {
+    getAllStoresReducer,
+    getStoreReducer,
+    deleteStoreReducer,
+    updateStoreReducer,
+    addStoreReducer,
+} from './reducers/store';
 
 import {
     addDeviceReducer,
@@ -61,8 +68,13 @@ const reducer = combineReducers({
     updateDevice: updateDeviceReducer,
     addDevice: addDeviceReducer,
     deleteDevice: deleteDeviceReducer,
+
     // store
-    allStores: getAllStoreReducer,
+    allStores: getAllStoresReducer,
+    getStore: getStoreReducer,
+    updateStore: updateStoreReducer,
+    addStore: addStoreReducer,
+    deleteStore: deleteStoreReducer,
 });
 
 const userInfoFormStorge = localStorage.getItem('userInfo')

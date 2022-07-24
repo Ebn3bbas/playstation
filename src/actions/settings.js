@@ -32,7 +32,7 @@ export const creatSettings = (form) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADD_SETTINGS_FAIL,
-      payload: error.response.data.error || error.response.data.errors,
+      payload: "failed",
     });
   }
 };
